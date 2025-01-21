@@ -18,6 +18,7 @@ it("let's create a livewire component to list all customers in the page", functi
 
     $customers = Customer::factory()->count(10)->create();
 
+
     $lw = Livewire::test(Index::class);
 
     $lw->assertSet('customers', function ($customers) {

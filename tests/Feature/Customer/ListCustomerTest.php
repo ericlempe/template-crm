@@ -1,7 +1,7 @@
 <?php
 
-use App\Livewire\Admin\Users\Index;
-use App\Models\{User};
+use App\Livewire\Customers\Index;
+use App\Models\{Customer, User};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Livewire;
 
@@ -14,17 +14,16 @@ it("should be able to access the route customers", function () {
 });
 
 it("let's create a livewire component to list all customers in the page", function () {
-    actingAs(User::factory()->admin()->create());
+    actingAs(User::factory()->create());
 
     $customers = Customer::factory()->count(10)->create();
-
 
     $lw = Livewire::test(Index::class);
 
     $lw->assertSet('customers', function ($customers) {
         expect($customers)
             ->toBeInstanceOf(LengthAwarePaginator::class)
-            ->toHaveCount(11);
+            ->toHaveCount(10);
 
         return true;
     });
@@ -35,7 +34,7 @@ it("let's create a livewire component to list all customers in the page", functi
 });
 
 test('check the table headers', function () {
-    actingAs(User::factory()->admin()->create());
+    actingAs(User::factory()->create());
 
     Livewire::test(Index::class)
         ->assertSet('headers', [
@@ -48,10 +47,9 @@ test('check the table headers', function () {
 });
 
 it('should be able to filter by name and email', function () {
-    $admin = User::factory()->admin()->create(['name' => 'John Doe', 'email' => 'john@doe.com']);
+    actingAs(User::factory()->create());
     Customer::factory()->create(['name' => 'Search Guy', 'email' => 'search-guy@email.com']);
-
-    actingAs($admin);
+    Customer::factory()->create(['name' => 'Another Guy', 'email' => 'another-guy@email.com']);
 
     Livewire::test(Index::class)
         ->assertSet('customers', function ($customers) {
@@ -77,32 +75,10 @@ it('should be able to filter by name and email', function () {
         });
 });
 
-it('should be able to list deleted customers', function () {
-    $admin = User::factory()->admin()->create(['name' => 'Joe Doe', 'email' => 'joe@doe.com']);
-    Customer::factory()->deleted($admin->id)->count(2)->create();
-
-    actingAs($admin);
-
-    Livewire::test(Index::class)
-        ->assertSet('customers', function ($customers) {
-            expect($customers)->toHaveCount(1);
-
-            return true;
-        })
-        ->set('search_trash', 1)
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
-                ->toHaveCount(2);
-
-            return true;
-        });
-});
-
 it('should be able to order the list by name', function () {
-    $admin = User::factory()->admin()->create(['name' => 'A user', 'email' => 'a-user@email.com']);
-    User::factory()->create(['name' => 'B user', 'email' => 'b-user@email.com']);
-
-    actingAs($admin);
+    actingAs(User::factory()->create());
+    Customer::factory()->create(['name' => 'A customer', 'email' => 'a-customer@email.com']);
+    Customer::factory()->create(['name' => 'B customer', 'email' => 'b-customer@email.com']);
 
     Livewire::test(Index::class)
         ->assertSet('customers', function ($customers) {
@@ -114,26 +90,25 @@ it('should be able to order the list by name', function () {
         ->set('sortBy', ['column' => 'name', 'direction' => 'asc'])
         ->assertSet('customers', function ($customers) {
             expect($customers)
-                ->first()->name->toBe('A user')
-                ->and($customers)->last()->name->toBe('B user');
+                ->first()->name->toBe('A customer')
+                ->and($customers)->last()->name->toBe('B customer');
 
             return true;
         })
         ->set('sortBy', ['column' => 'name', 'direction' => 'desc'])
         ->assertSet('customers', function ($customers) {
             expect($customers)
-                ->first()->name->toBe('B user')
-                ->and($customers)->last()->name->toBe('A user');
+                ->first()->name->toBe('B customer')
+                ->and($customers)->last()->name->toBe('A customer');
 
             return true;
         });
 });
 
 it('should be able to order the list by created at', function () {
-    $admin = User::factory()->admin()->create(['name' => 'A user', 'created_at' => now()->subDay()]);
-    User::factory()->create(['name' => 'B user', 'created_at' => now()]);
-
-    actingAs($admin);
+    actingAs(User::factory()->create());
+    Customer::factory()->create(['name' => 'A customer', 'created_at' => now()->subDay()]);
+    Customer::factory()->create(['name' => 'B customer', 'created_at' => now()]);
 
     Livewire::test(Index::class)
         ->assertSet('customers', function ($customers) {
@@ -145,26 +120,24 @@ it('should be able to order the list by created at', function () {
         ->set('sortBy', ['column' => 'created_at', 'direction' => 'asc'])
         ->assertSet('customers', function ($customers) {
             expect($customers)
-                ->first()->name->toBe('A user')
-                ->and($customers)->last()->name->toBe('B user');
+                ->first()->name->toBe('A customer')
+                ->and($customers)->last()->name->toBe('B customer');
 
             return true;
         })
         ->set('sortBy', ['column' => 'created_at', 'direction' => 'desc'])
         ->assertSet('customers', function ($customers) {
             expect($customers)
-                ->first()->name->toBe('B user')
-                ->and($customers)->last()->name->toBe('A user');
+                ->first()->name->toBe('B customer')
+                ->and($customers)->last()->name->toBe('A customer');
 
             return true;
         });
 });
 
 it('should be able to paginate the list', function () {
-    $admin = User::factory()->admin()->create();
-    User::factory()->count(30)->create();
-
-    actingAs($admin);
+    actingAs(User::factory()->create());
+    Customer::factory()->count(30)->create();
 
     Livewire::test(Index::class)
         ->assertSet('customers', function (LengthAwarePaginator $customers) {

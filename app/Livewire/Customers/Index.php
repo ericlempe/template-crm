@@ -3,6 +3,7 @@
 namespace App\Livewire\Customers;
 
 use App\Models\Customer;
+use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\{Builder};
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -16,18 +17,8 @@ use Livewire\{Attributes\On, Component, WithPagination};
  */
 class Index extends Component
 {
+    use HasTable;
     use WithPagination;
-
-    public ?string $search = null;
-
-    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
-
-    public int $perPage = 15;
-
-    public function updatedPerPage($value): void
-    {
-        $this->resetPage();
-    }
 
     #[On('customer::deleted')]
     #[On('customer::restored')]
@@ -39,8 +30,6 @@ class Index extends Component
     #[Computed]
     public function customers(): LengthAwarePaginator
     {
-        #$this->validate();
-
         return Customer::query()
             ->when(
                 $this->search,
@@ -53,7 +42,7 @@ class Index extends Component
     }
 
     #[Computed]
-    public function headers(): array
+    protected function headers(): array
     {
         return [
             ['key' => 'id', 'label' => '#'],
@@ -61,17 +50,6 @@ class Index extends Component
             ['key' => 'email', 'label' => 'Email'],
             ['key' => 'phone', 'label' => 'Phone'],
             ['key' => 'created_at', 'label' => 'Created at'],
-        ];
-    }
-
-    #[Computed]
-    public function filterPerPage(): array
-    {
-        return [
-            ['id' => 5, 'name' => '5'],
-            ['id' => 15, 'name' => '15'],
-            ['id' => 25, 'name' => '25'],
-            ['id' => 50, 'name' => '50'],
         ];
     }
 

@@ -4,6 +4,7 @@ namespace App\Livewire\Admin\Users;
 
 use App\Enums\Can;
 use App\Models\{Permission, User};
+use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\{Builder, Collection};
 use Illuminate\Pagination\LengthAwarePaginator;
@@ -17,9 +18,8 @@ use Livewire\{Attributes\On, Attributes\Rule, Component, WithPagination};
  */
 class Index extends Component
 {
+    use HasTable;
     use WithPagination;
-
-    public ?string $search = null;
 
     #[Rule('exists:permissions,id')]
     public array $search_permissions = [];
@@ -28,19 +28,10 @@ class Index extends Component
 
     public Collection $permissions_to_search;
 
-    public array $sortBy = ['column' => 'name', 'direction' => 'asc'];
-
-    public int $perPage = 15;
-
     public function mount(): void
     {
         $this->authorize(Can::BE_AN_ADMIN->value);
         $this->filterPermissions();
-    }
-
-    public function updatedPerPage($value): void
-    {
-        $this->resetPage();
     }
 
     #[On('user::deleted')]
@@ -98,17 +89,6 @@ class Index extends Component
             )
             ->orderBy('key')
             ->get();
-    }
-
-    #[Computed]
-    public function filterPerPage(): array
-    {
-        return [
-            ['id' => 5, 'name' => '5'],
-            ['id' => 15, 'name' => '15'],
-            ['id' => 25, 'name' => '25'],
-            ['id' => 50, 'name' => '50'],
-        ];
     }
 
     #[Computed]

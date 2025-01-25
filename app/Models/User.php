@@ -14,8 +14,8 @@ use OwenIt\Auditing\Contracts\Auditable;
 class User extends Authenticatable implements Auditable
 {
     use HasFactory;
-    use Notifiable;
     use HasPermissions;
+    use Notifiable;
     use SoftDeletes;
     use \OwenIt\Auditing\Auditable;
 

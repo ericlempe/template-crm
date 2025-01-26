@@ -3,16 +3,13 @@
 namespace App\Livewire\Customers;
 
 use App\Models\Customer;
+use App\Support\Table\Header;
 use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
 use Livewire\{Attributes\On, Component, WithPagination};
 
-/**
- * @property-read LengthAwarePaginator|Customer[] $customers
- * @property-read  array $headers
- */
 class Index extends Component
 {
     use HasTable;
@@ -25,24 +22,24 @@ class Index extends Component
         return view('livewire.customers.index');
     }
 
-    #[Computed]
-    public function customers(): LengthAwarePaginator
+    public function query(): Builder
     {
-        return Customer::query()
-            ->search($this->search, ['name', 'email'])
-            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
-            ->paginate($this->perPage);
+        return Customer::query();
     }
 
-    #[Computed]
-    protected function headers(): array
+    public function searchColumns(): array
+    {
+        return ['name', 'email'];
+    }
+
+    public function tableHeaders(): array
     {
         return [
-            ['key' => 'id', 'label' => '#'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'phone', 'label' => 'Phone'],
-            ['key' => 'created_at', 'label' => 'Created at'],
+            Header::make('id', '#'),
+            Header::make('name', 'Name'),
+            Header::make('email', 'Email'),
+            Header::make('phone', 'Phone'),
+            Header::make('created_at', 'Created at'),
         ];
     }
 

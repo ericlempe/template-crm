@@ -17,19 +17,19 @@
         </div>
     </div>
 
-    <x-table :headers="$this->headers" :rows="$this->customers" :sort-by="$sortBy" with-pagination>
-
-        @scope('cell_created_at', $customer)
-        {{ $customer->created_at->format('d/m/Y') }}
+    <x-table :headers="$this->headers" :rows="$this->items">
+        @scope('header_id', $header)
+        <x-table.th :$header name="id"/>
         @endscope
 
-        @php
-            /** @var \App\Models\Customer $customer */
-        @endphp
-        @scope('actions', $customer)
+        @scope('header_name', $header)
+        <x-table.th :$header name="name"/>
+        @endscope
 
-        <div class="flex space-x-1">
-        </div>
+        @scope('header_email', $header)
+        <x-table.th :$header name="email"/>
         @endscope
     </x-table>
+
+    {{ $this->items->links(data: ['scrollTo' => false]) }}
 </div>

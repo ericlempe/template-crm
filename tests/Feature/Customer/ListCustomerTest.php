@@ -4,45 +4,43 @@ use App\Livewire\Customers\Index;
 use App\Models\{Customer, User};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Livewire;
-
 use function Pest\Laravel\{actingAs, get};
 
-it("should be able to access the route customers", function () {
+it('should be able to access the route customers', function () {
     actingAs(User::factory()->create());
-
     get(route('customers'))->assertOk();
 });
 
-it("let's create a livewire component to list all customers in the page", function () {
+it("let's create a livewire component to list all items in the page", function () {
     actingAs(User::factory()->create());
 
-    $customers = Customer::factory()->count(10)->create();
+    $items = Customer::factory()->count(10)->create();
 
     $lw = Livewire::test(Index::class);
 
-    $lw->assertSet('customers', function ($customers) {
-        expect($customers)
+    $lw->assertSet('items', function ($items) {
+        expect($items)
             ->toBeInstanceOf(LengthAwarePaginator::class)
             ->toHaveCount(10);
 
         return true;
     });
 
-    foreach ($customers as $customer) {
+    foreach ($items as $customer) {
         $lw->assertSee($customer->name);
     }
 });
 
-test('check the table headers', function () {
+test('check the table format', function () {
     actingAs(User::factory()->create());
 
     Livewire::test(Index::class)
         ->assertSet('headers', [
-            ['key' => 'id', 'label' => '#'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'phone', 'label' => 'Phone'],
-            ['key' => 'created_at', 'label' => 'Created at'],
+            ['key' => 'id', 'label' => '#', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'name', 'label' => 'Name', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'email', 'label' => 'Email', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'phone', 'label' => 'Phone', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'created_at', 'label' => 'Created at', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
         ]);
 });
 
@@ -52,22 +50,22 @@ it('should be able to filter by name and email', function () {
     Customer::factory()->create(['name' => 'Another Guy', 'email' => 'another-guy@email.com']);
 
     Livewire::test(Index::class)
-        ->assertSet('customers', function ($customers) {
-            expect($customers)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
         ->set('search', 'Search Guy')
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->toHaveCount(1)
                 ->first()->name->toBe('Search Guy');
 
             return true;
         })
         ->set('search', 'search-guy@email.com')
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->toHaveCount(1)
                 ->first()->email->toBe('search-guy@email.com');
 
@@ -81,25 +79,26 @@ it('should be able to order the list by name', function () {
     Customer::factory()->create(['name' => 'B customer', 'email' => 'b-customer@email.com']);
 
     Livewire::test(Index::class)
-        ->assertSet('customers', function ($customers) {
-            expect($customers)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
-
-        ->set('sortBy', ['column' => 'name', 'direction' => 'asc'])
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
+        ->set('sortDirection', 'asc')
+        ->set('sortColumnBy', 'name')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('A customer')
-                ->and($customers)->last()->name->toBe('B customer');
+                ->and($items)->last()->name->toBe('B customer');
 
             return true;
         })
-        ->set('sortBy', ['column' => 'name', 'direction' => 'desc'])
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
+        ->set('sortDirection', 'desc')
+        ->set('sortColumnBy', 'name')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('B customer')
-                ->and($customers)->last()->name->toBe('A customer');
+                ->and($items)->last()->name->toBe('A customer');
 
             return true;
         });
@@ -111,25 +110,26 @@ it('should be able to order the list by created at', function () {
     Customer::factory()->create(['name' => 'B customer', 'created_at' => now()]);
 
     Livewire::test(Index::class)
-        ->assertSet('customers', function ($customers) {
-            expect($customers)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
-
-        ->set('sortBy', ['column' => 'created_at', 'direction' => 'asc'])
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
+        ->set('sortDirection', 'asc')
+        ->set('sortColumnBy', 'created_at')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('A customer')
-                ->and($customers)->last()->name->toBe('B customer');
+                ->and($items)->last()->name->toBe('B customer');
 
             return true;
         })
-        ->set('sortBy', ['column' => 'created_at', 'direction' => 'desc'])
-        ->assertSet('customers', function ($customers) {
-            expect($customers)
+        ->set('sortDirection', 'desc')
+        ->set('sortColumnBy', 'created_at')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('B customer')
-                ->and($customers)->last()->name->toBe('A customer');
+                ->and($items)->last()->name->toBe('A customer');
 
             return true;
         });
@@ -140,14 +140,14 @@ it('should be able to paginate the list', function () {
     Customer::factory()->count(30)->create();
 
     Livewire::test(Index::class)
-        ->assertSet('customers', function (LengthAwarePaginator $customers) {
-            expect($customers)->toHaveCount(15);
+        ->assertSet('items', function (LengthAwarePaginator $items) {
+            expect($items)->toHaveCount(15);
 
             return true;
         })
         ->set('perPage', 10)
-        ->assertSet('customers', function (LengthAwarePaginator $customers) {
-            expect($customers)->toHaveCount(10);
+        ->assertSet('items', function (LengthAwarePaginator $items) {
+            expect($items)->toHaveCount(10);
 
             return true;
         });

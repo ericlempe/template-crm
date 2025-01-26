@@ -29,6 +29,10 @@
         @scope('header_email', $header)
         <x-table.th :$header name="email"/>
         @endscope
+
+        @scope('header_created_at', $header)
+        <x-table.th :$header name="created_at"/>
+        @endscope
     </x-table>
 
     {{ $this->items->links(data: ['scrollTo' => false]) }}

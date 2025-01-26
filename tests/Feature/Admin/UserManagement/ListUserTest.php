@@ -8,48 +8,42 @@ use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs, get};
 
-it("should be able to access the route admin/users", function () {
+it('should be able to access the route admin/users', function () {
     actingAs(User::factory()->admin()->create());
-
     get(route('admin.users'))->assertOk();
 });
 
-test("making sure that the route is protected by the permission BE_AN_ADMIN", function () {
+test('making sure that the route is protected by the permission BE_AN_ADMIN', function () {
     actingAs(User::factory()->create());
-
     get(route('admin.users'))->assertForbidden();
 });
 
 it("let's create a livewire component to list all users in the page", function () {
     actingAs(User::factory()->admin()->create());
-
-    $users = User::factory()->count(10)->create();
-
-    $lw = Livewire::test(Index::class);
-
-    $lw->assertSet('users', function ($users) {
-        expect($users)
+    $items = User::factory()->count(10)->create();
+    $lw    = Livewire::test(Index::class);
+    $lw->assertSet('items', function ($items) {
+        expect($items)
             ->toBeInstanceOf(LengthAwarePaginator::class)
             ->toHaveCount(11);
 
         return true;
     });
 
-    foreach ($users as $user) {
+    foreach ($items as $user) {
         $lw->assertSee($user->name);
     }
 });
 
-test('check the table headers', function () {
+test('check the table format', function () {
     actingAs(User::factory()->admin()->create());
-
     Livewire::test(Index::class)
         ->assertSet('headers', [
-            ['key' => 'id', 'label' => '#'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'created_at', 'label' => 'Created at'],
-            ['key' => 'permissions', 'label' => 'Permissions', 'sortable' => false],
+            ['key' => 'id', 'label' => '#', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'name', 'label' => 'Name', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'email', 'label' => 'Email', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'permissions', 'label' => 'Permissions', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
+            ['key' => 'created_at', 'label' => 'Created at', 'sortColumnBy' => 'id', 'sortDirection' => 'asc'],
         ]);
 });
 
@@ -60,22 +54,22 @@ it('should be able to filter by name and email', function () {
     actingAs($admin);
 
     Livewire::test(Index::class)
-        ->assertSet('users', function ($users) {
-            expect($users)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
         ->set('search', 'Search Guy')
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->toHaveCount(1)
                 ->first()->name->toBe('Search Guy');
 
             return true;
         })
         ->set('search', 'search-guy@email.com')
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->toHaveCount(1)
                 ->first()->email->toBe('search-guy@email.com');
 
@@ -91,14 +85,14 @@ it('should be able to filter by permission key', function () {
     actingAs($admin);
 
     Livewire::test(Index::class)
-        ->assertSet('users', function ($users) {
-            expect($users)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
         ->set('search_permissions', [$permission->id])
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->toHaveCount(1)
                 ->first()->name->toBe('Joe Doe');
 
@@ -113,14 +107,14 @@ it('should be able to list deleted users', function () {
     actingAs($admin);
 
     Livewire::test(Index::class)
-        ->assertSet('users', function ($users) {
-            expect($users)->toHaveCount(1);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(1);
 
             return true;
         })
         ->set('search_trash', 1)
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->toHaveCount(2);
 
             return true;
@@ -134,25 +128,26 @@ it('should be able to order the list by name', function () {
     actingAs($admin);
 
     Livewire::test(Index::class)
-        ->assertSet('users', function ($users) {
-            expect($users)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
-
-        ->set('sortBy', ['column' => 'name', 'direction' => 'asc'])
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->set('sortDirection', 'asc')
+        ->set('sortColumnBy', 'name')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('A user')
-                ->and($users)->last()->name->toBe('B user');
+                ->and($items)->last()->name->toBe('B user');
 
             return true;
         })
-        ->set('sortBy', ['column' => 'name', 'direction' => 'desc'])
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->set('sortDirection', 'desc')
+        ->set('sortColumnBy', 'name')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('B user')
-                ->and($users)->last()->name->toBe('A user');
+                ->and($items)->last()->name->toBe('A user');
 
             return true;
         });
@@ -165,25 +160,26 @@ it('should be able to order the list by created at', function () {
     actingAs($admin);
 
     Livewire::test(Index::class)
-        ->assertSet('users', function ($users) {
-            expect($users)->toHaveCount(2);
+        ->assertSet('items', function ($items) {
+            expect($items)->toHaveCount(2);
 
             return true;
         })
-
-        ->set('sortBy', ['column' => 'created_at', 'direction' => 'asc'])
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->set('sortDirection', 'asc')
+        ->set('sortColumnBy', 'created_at')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('A user')
-                ->and($users)->last()->name->toBe('B user');
+                ->and($items)->last()->name->toBe('B user');
 
             return true;
         })
-        ->set('sortBy', ['column' => 'created_at', 'direction' => 'desc'])
-        ->assertSet('users', function ($users) {
-            expect($users)
+        ->set('sortDirection', 'desc')
+        ->set('sortColumnBy', 'created_at')
+        ->assertSet('items', function ($items) {
+            expect($items)
                 ->first()->name->toBe('B user')
-                ->and($users)->last()->name->toBe('A user');
+                ->and($items)->last()->name->toBe('A user');
 
             return true;
         });
@@ -196,14 +192,14 @@ it('should be able to paginate the list', function () {
     actingAs($admin);
 
     Livewire::test(Index::class)
-        ->assertSet('users', function (LengthAwarePaginator $users) {
-            expect($users)->toHaveCount(15);
+        ->assertSet('items', function (LengthAwarePaginator $items) {
+            expect($items)->toHaveCount(15);
 
             return true;
         })
         ->set('perPage', 10)
-        ->assertSet('users', function (LengthAwarePaginator $users) {
-            expect($users)->toHaveCount(10);
+        ->assertSet('items', function (LengthAwarePaginator $items) {
+            expect($items)->toHaveCount(10);
 
             return true;
         });

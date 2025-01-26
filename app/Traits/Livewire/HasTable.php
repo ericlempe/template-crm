@@ -23,11 +23,10 @@ trait HasTable
     public int $perPage = 15;
 
     /** @return Header[] */
-    abstract public function tableHeaders(): array;
 
     abstract public function query(): Builder;
-
     abstract public function searchColumns(): array;
+    abstract public function tableHeaders(): array;
 
     #[Computed]
     public function items(): LengthAwarePaginator

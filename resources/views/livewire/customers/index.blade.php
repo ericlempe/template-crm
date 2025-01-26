@@ -33,6 +33,10 @@
         @scope('header_created_at', $header)
         <x-table.th :$header name="created_at"/>
         @endscope
+
+        @scope('cell_created_at', $customer)
+        {{ $customer->created_at->format('d/m/Y') }}
+        @endscope
     </x-table>
 
     {{ $this->items->links(data: ['scrollTo' => false]) }}

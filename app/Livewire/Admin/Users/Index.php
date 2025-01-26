@@ -4,18 +4,13 @@ namespace App\Livewire\Admin\Users;
 
 use App\Enums\Can;
 use App\Models\{Permission, User};
+use App\Support\Table\Header;
 use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\{Builder, Collection};
-use Illuminate\Pagination\LengthAwarePaginator;
-use Illuminate\Support\Facades\DB;
 use Livewire\Attributes\Computed;
 use Livewire\{Attributes\On, Attributes\Rule, Component, WithPagination};
 
-/**
- * @property-read LengthAwarePaginator|User[] $users
- * @property-read  array $headers
- */
 class Index extends Component
 {
     use HasTable;
@@ -41,19 +36,12 @@ class Index extends Component
         return view('livewire.admin.users.index');
     }
 
-    #[Computed]
-    public function users(): LengthAwarePaginator
+    public function query(): Builder
     {
         $this->validate();
 
         return User::query()
             ->with('permissions')
-            ->when(
-                $this->search,
-                fn (Builder $q) => $q
-                    ->where(DB::raw('lower(name)'), 'like', '%' . strtolower($this->search) . '%')
-                    ->orWHere(DB::raw('lower(email)'), 'like', '%' . strtolower($this->search) . '%')
-            )
             ->when(
                 $this->search_permissions,
                 fn (Builder $q) => $q->whereHas('permissions', function (Builder $query) {
@@ -63,20 +51,22 @@ class Index extends Component
             ->when(
                 $this->search_trash,
                 fn (Builder $q) => $q->onlyTrashed()
-            )
-            ->orderBy($this->sortBy['column'], $this->sortBy['direction'])
-            ->paginate($this->perPage);
+            );
     }
 
-    #[Computed]
-    public function headers(): array
+    public function searchColumns(): array
+    {
+        return ['id', 'name', 'email'];
+    }
+
+    public function tableHeaders(): array
     {
         return [
-            ['key' => 'id', 'label' => '#'],
-            ['key' => 'name', 'label' => 'Name'],
-            ['key' => 'email', 'label' => 'Email'],
-            ['key' => 'created_at', 'label' => 'Created at'],
-            ['key' => 'permissions', 'label' => 'Permissions', 'sortable' => false],
+            Header::make('id', '#'),
+            Header::make('name', 'Name'),
+            Header::make('email', 'Email'),
+            Header::make('permissions', 'Permissions'),
+            Header::make('created_at', 'Created at'),
         ];
     }
 

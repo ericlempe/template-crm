@@ -1,3 +1,5 @@
+@use('App\Models\User')
+@use('Illuminate\Support\Str')
 <div x-data="{ showFilters: false, toggleFilters() { this.showFilters = !this.showFilters } }">
     <x-header title="Users" separator/>
 
@@ -28,10 +30,26 @@
         </div>
     </div>
 
-    <x-table :headers="$this->headers" :rows="$this->users" :sort-by="$sortBy" with-pagination>
+    <x-table :headers="$this->headers" :rows="$this->items">
+        @scope('header_id', $header)
+        <x-table.th :$header name="id"/>
+        @endscope
+
+        @scope('header_name', $header)
+        <x-table.th :$header name="name"/>
+        @endscope
+
+        @scope('header_email', $header)
+        <x-table.th :$header name="email"/>
+        @endscope
+
+        @scope('header_created_at', $header)
+        <x-table.th :$header name="created_at"/>
+        @endscope
+
         @scope('cell_permissions', $user)
         @foreach($user->permissions as $permission)
-            <x-badge :value="\Illuminate\Support\Str::ucfirst($permission->key)" class="badge-info"/>
+            <x-badge :value="Str::ucfirst($permission->key)" class="badge-info"/>
         @endforeach
         @endscope
 
@@ -40,7 +58,7 @@
         @endscope
 
         @php
-            /** @var \App\Models\User $user */
+            /** @var User $user */
         @endphp
         @scope('actions', $user)
 
@@ -67,7 +85,7 @@
                     :disabled="$user->is(auth()->user())"
                 />
 
-                 <x-button
+                <x-button
                     id="btn-impersonate-user-{{ $user->id }}"
                     wire:key="btn-impersonate-user-{{ $user->id }}"
                     icon="o-eye"
@@ -91,6 +109,8 @@
         </div>
         @endscope
     </x-table>
+
+    {{ $this->items->links(data: ['scrollTo' => false]) }}
 
     <livewire:admin.users.delete/>
     <livewire:admin.users.restore/>

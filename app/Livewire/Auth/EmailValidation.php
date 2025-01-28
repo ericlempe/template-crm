@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Notifications\WelcomeNotification;
 use App\Rules\CodeValidation;
 use Carbon\Carbon;
+use Exception;
 use Illuminate\View\View;
 use Livewire\Attributes\{Layout, On, Rule};
 use Livewire\Component;
@@ -39,7 +40,7 @@ class EmailValidation extends Component
             $user->notify(new WelcomeNotification());
 
             $this->redirect(route('dashboard'));
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->addError('code', $e->getMessage());
         }
     }

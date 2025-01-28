@@ -1,5 +1,10 @@
 <div x-data="{ showFilters: false, toggleFilters() { this.showFilters = !this.showFilters } }">
-    <x-header title="Customers" separator/>
+
+    <x-header title="Customers" separator>
+        <x-slot:actions>
+            <x-button icon="o-plus" class="btn-primary" @click="$dispatch('customer::create')"/>
+        </x-slot:actions>
+    </x-header>
 
     <div x-show="showFilters" class="flex mb-14 items-center space-x-4">
     </div>
@@ -40,4 +45,6 @@
     </x-table>
 
     {{ $this->items->links(data: ['scrollTo' => false]) }}
+
+    <livewire:customers.create/>
 </div>

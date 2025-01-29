@@ -5,12 +5,12 @@
     "keywords": ["laravel", "framework"],
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.3",
         "laravel/framework": "^11.9",
         "laravel/tinker": "^2.9",
         "livewire/livewire": "^3.5",
         "owen-it/laravel-auditing": "^13.6",
-        "robsontenorio/mary": "^1.35"
+        "robsontenorio/mary": "^1.41"
     },
     "require-dev": {
         "barryvdh/laravel-debugbar": "^3.14",

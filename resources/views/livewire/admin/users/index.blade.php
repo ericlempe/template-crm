@@ -1,20 +1,10 @@
 @use('App\Models\User')
 @use('Illuminate\Support\Str')
-<div x-data="{ showFilters: false, toggleFilters() { this.showFilters = !this.showFilters } }">
+<div>
     <x-header title="Users" separator/>
 
     <div x-show="showFilters" class="flex mb-14 items-center space-x-4">
-        <x-choices
-            Label="Search by permissions"
-            wire:model.live="search_permissions"
-            :options="$permissions_to_search"
-            option-label="key"
-            search-function="filterPermissions"
-            searchable
-            multiple
-            no-result-text="Nothing here"
-        />
-        <x-select label="Show deleted users" :options="$this->filterShowDeletedUsers" wire:model.live="search_trash"/>
+
     </div>
 
     <div class="mb-4 flex justify-between">
@@ -26,7 +16,27 @@
                 wire:model.live.debounce="search"
                 clearable
             />
-            <x-button @click="toggleFilters()" label="Filters" icon="o-funnel" class="btn-primary"/>
+
+            <x-dropdown label="Filters" class="btn-outline">
+                <x-slot:trigger>
+                    <x-button icon="o-funnel" class="btn-primary"/>
+                </x-slot:trigger>
+
+                <x-menu-item @click.stop="">
+
+                    <x-select
+                        class="select-sm"
+                        label="Permissions"
+                        :options="$permissions_to_search"
+                        option-label="key"
+                        placeholder="All"
+                        wire:model.live="search_permissions"/>
+                </x-menu-item>
+
+                <x-menu-item @click.stop="">
+                    <x-toggle label="Deleted" wire:model.live="showDeleted"/>
+                </x-menu-item>
+            </x-dropdown>
         </div>
     </div>
 

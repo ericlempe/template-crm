@@ -8,18 +8,16 @@ use App\Support\Table\Header;
 use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\{Builder, Collection};
-use Livewire\Attributes\Computed;
-use Livewire\{Attributes\On, Attributes\Rule, Component, WithPagination};
+use Livewire\{Attributes\On, Component, WithPagination};
 
 class Index extends Component
 {
     use HasTable;
     use WithPagination;
 
-    #[Rule('exists:permissions,id')]
-    public array $search_permissions = [];
+    public ?int $search_permissions = null;
 
-    public int $search_trash = 0;
+    public bool $showDeleted = false;
 
     public Collection $permissions_to_search;
 
@@ -38,18 +36,16 @@ class Index extends Component
 
     public function query(): Builder
     {
-        $this->validate();
-
         return User::query()
             ->with('permissions')
             ->when(
                 $this->search_permissions,
                 fn (Builder $q) => $q->whereHas('permissions', function (Builder $query) {
-                    $query->whereIn('id', $this->search_permissions);
+                    $query->where('id', $this->search_permissions);
                 })
             )
             ->when(
-                $this->search_trash,
+                $this->showDeleted,
                 fn (Builder $q) => $q->onlyTrashed()
             );
     }
@@ -79,15 +75,6 @@ class Index extends Component
             )
             ->orderBy('key')
             ->get();
-    }
-
-    #[Computed]
-    public function filterShowDeletedUsers(): array
-    {
-        return [
-            ['id' => 0, 'name' => 'No'],
-            ['id' => 1, 'name' => 'Yes'],
-        ];
     }
 
     public function destroy(int $id): void

@@ -49,10 +49,10 @@ class Delete extends Component
         $this->dispatch('user::deleted');
     }
 
-    #[On('user::delete')]
-    public function openConfimation(int $userId): void
+    #[On('user::destroy')]
+    public function openConfimation(int $id): void
     {
-        $this->user  = User::select('id', 'name')->find($userId);
+        $this->user  = User::select('id', 'name')->find($id);
         $this->modal = true;
     }
 

@@ -37,9 +37,9 @@ class Impersonate extends Component
     }
 
     #[On('user::impersonate')]
-    public function openConfimation(int $userId): void
+    public function openConfimation(int $id): void
     {
-        $this->user  = User::select('id', 'name')->find($userId);
+        $this->user  = User::select('id', 'name')->find($id);
         $this->modal = true;
     }
 

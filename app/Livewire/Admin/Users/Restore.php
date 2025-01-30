@@ -42,9 +42,9 @@ class Restore extends Component
     }
 
     #[On('user::restore')]
-    public function openConfimation(int $userId): void
+    public function openConfimation(int $id): void
     {
-        $this->user  = User::withTrashed()->select('id', 'name')->find($userId);
+        $this->user  = User::withTrashed()->select('id', 'name')->find($id);
         $this->modal = true;
     }
 

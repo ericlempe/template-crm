@@ -31,7 +31,7 @@ class Archive extends Component
         $this->customer->delete();
 
         $this->reset('confirmedArchiving', 'modal');
-        $this->success('User archived successfully');
+        $this->success('Customer archived successfully');
         $this->dispatch('customer::archived');
     }
 

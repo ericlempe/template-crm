@@ -24,7 +24,7 @@ it('should be able to archive a customer', function () {
     ]);
 });
 
-it('should have a confirmation before deletion', function () {
+it('should have a confirmation before archiving', function () {
     $customer = Customer::factory()->create();
 
     Livewire::test(Archive::class)

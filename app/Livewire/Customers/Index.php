@@ -7,7 +7,6 @@ use App\Support\Table\Header;
 use App\Traits\Livewire\HasTable;
 use Illuminate\Contracts\View\View;
 use Illuminate\Database\Eloquent\Builder;
-use Livewire\Attributes\Computed;
 use Livewire\{Attributes\On, Component, WithPagination};
 
 class Index extends Component
@@ -15,7 +14,9 @@ class Index extends Component
     use HasTable;
     use WithPagination;
 
-    #[On('customer::deleted')]
+    public bool $showArchived = false;
+
+    #[On('customer::archived')]
     #[On('customer::restored')]
     public function render(): View
     {
@@ -24,7 +25,10 @@ class Index extends Component
 
     public function query(): Builder
     {
-        return Customer::query();
+        return Customer::query()->when(
+            $this->showArchived,
+            fn (Builder $q) => $q->onlyTrashed()
+        );
     }
 
     public function searchColumns(): array
@@ -41,15 +45,5 @@ class Index extends Component
             Header::make('phone', 'Phone'),
             Header::make('created_at', 'Created at'),
         ];
-    }
-
-    public function destroy(int $id): void
-    {
-        $this->dispatch('customer::deletion', customerId: $id);
-    }
-
-    public function restore(int $id): void
-    {
-        $this->dispatch('customer::restoration', customerId: $id);
     }
 }

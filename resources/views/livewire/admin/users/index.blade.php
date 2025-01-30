@@ -77,7 +77,7 @@
                 id="btn-show-user-{{ $user->id }}"
                 wire:key="btn-show-user-{{ $user->id }}"
                 icon="o-pencil"
-                wire:click="showUser('{{ $user->id }}')"
+                @click="$dispatch('user::show', { id: '{{ $user->id }}' })"
                 class="btn-sm btn-ghost"
                 tooltip="{{ __('Show details') }}"
                 spinner
@@ -88,7 +88,7 @@
                     id="btn-delete-user-{{ $user->id }}"
                     wire:key="btn-delete-user-{{ $user->id }}"
                     icon="o-trash"
-                    wire:click="destroy('{{ $user->id }}')"
+                    @click="$dispatch('user::destroy', { id: '{{ $user->id }}' })"
                     class="btn-sm btn-ghost"
                     tooltip="{{ __('Delete') }}"
                     spinner
@@ -99,7 +99,7 @@
                     id="btn-impersonate-user-{{ $user->id }}"
                     wire:key="btn-impersonate-user-{{ $user->id }}"
                     icon="o-eye"
-                    wire:click="impersonate('{{ $user->id }}')"
+                    @click="$dispatch('user::impersonate', { id: '{{ $user->id }}' })"
                     class="btn-sm btn-ghost"
                     tooltip="{{ __('Impersonate') }}"
                     spinner
@@ -110,7 +110,7 @@
                     id="btn-restore-user-{{ $user->id }}"
                     wire:key="btn-restore-user-{{ $user->id }}"
                     icon="o-arrow-path"
-                    wire:click="restore('{{ $user->id }}')"
+                    @click="$dispatch('user::restore', { id: '{{ $user->id }}' })"
                     class="btn-sm btn-ghost"
                     tooltip="{{ __('Restore') }}"
                     spinner

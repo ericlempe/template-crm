@@ -36,7 +36,7 @@ class Impersonate extends Component
         $this->redirect(route('dashboard'));
     }
 
-    #[On('user::impersonation')]
+    #[On('user::impersonate')]
     public function openConfimation(int $userId): void
     {
         $this->user  = User::select('id', 'name')->find($userId);

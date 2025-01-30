@@ -49,7 +49,7 @@ class Delete extends Component
         $this->dispatch('user::deleted');
     }
 
-    #[On('user::deletion')]
+    #[On('user::delete')]
     public function openConfimation(int $userId): void
     {
         $this->user  = User::select('id', 'name')->find($userId);

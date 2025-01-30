@@ -76,24 +76,4 @@ class Index extends Component
             ->orderBy('key')
             ->get();
     }
-
-    public function destroy(int $id): void
-    {
-        $this->dispatch('user::deletion', userId: $id);
-    }
-
-    public function restore(int $id): void
-    {
-        $this->dispatch('user::restoration', userId: $id);
-    }
-
-    public function showUser(int $id): void
-    {
-        $this->dispatch('user::show', userId: $id);
-    }
-
-    public function impersonate(int $id): void
-    {
-        $this->dispatch('user::impersonation', userId: $id);
-    }
 }

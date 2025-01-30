@@ -41,7 +41,7 @@ class Restore extends Component
         $this->dispatch('user::restored');
     }
 
-    #[On('user::restoration')]
+    #[On('user::restore')]
     public function openConfimation(int $userId): void
     {
         $this->user  = User::withTrashed()->select('id', 'name')->find($userId);

@@ -22,7 +22,7 @@ it('should be able to create a customer', function () {
         ->call('save')
         ->assertMethodWiredToForm('save')
         ->assertHasNoErrors()
-        ->assertRedirectToRoute('customers');
+        ->assertDispatched('customer::reload');
 
     assertDatabaseHas('customers', [
         'name'  => 'John Doe',

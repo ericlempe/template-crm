@@ -6,9 +6,12 @@ use App\Models\Customer;
 use Illuminate\View\View;
 use Livewire\Attributes\{On, Rule};
 use Livewire\Component;
+use Mary\Traits\Toast;
 
 class Create extends Component
 {
+    use Toast;
+
     #[Rule(['required', 'min:3', 'max:255'])]
     public ?string $name = '';
 
@@ -35,7 +38,9 @@ class Create extends Component
             'phone' => $this->phone,
         ]);
 
-        $this->redirectRoute('customers');
+        $this->success('Customer created successfully');
+        $this->reset('modal');
+        $this->dispatch('customer::reload');
     }
 
     #[On('customer::create')]

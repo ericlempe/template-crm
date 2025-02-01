@@ -65,12 +65,12 @@
                 />
             @else
                 <x-button
-                    id="btn-unarchive-customer-{{ $customer->id }}"
-                    wire:key="btn-unarchive-customer-{{ $customer->id }}"
-                    icon="o-archive-box-x-mark"
-                    wire:click="unarchive('{{ $customer->id }}')"
+                    id="btn-restore-customer-{{ $customer->id }}"
+                    wire:key="btn-restore-customer-{{ $customer->id }}"
+                    icon="o-arrow-path"
+                    @click="$dispatch('customer::restore', { id: '{{ $customer->id }}' })"
                     class="btn-sm btn-ghost"
-                    tooltip="{{ __('Unarchive') }}"
+                    tooltip="{{ __('Restore') }}"
                     spinner
                 />
             @endunless
@@ -82,4 +82,5 @@
 
     <livewire:customers.create/>
     <livewire:customers.archive/>
+    <livewire:customers.restore/>
 </div>

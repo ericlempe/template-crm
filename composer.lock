@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "f9552dc781c4fa3d8a04fa5b0afeb33e",
+    "content-hash": "d10cad23b8f5fabe7b27438954a0116f",
     "packages": [
         {
             "name": "blade-ui-kit/blade-heroicons",
@@ -6616,6 +6616,71 @@
             "time": "2024-10-15T12:45:19+00:00"
         },
         {
+            "name": "christophrumpel/missing-livewire-assertions",
+            "version": "v2.9.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/christophrumpel/missing-livewire-assertions.git",
+                "reference": "7a87e9291f0b4c9f1d414b8195435a24d980d0a2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/christophrumpel/missing-livewire-assertions/zipball/7a87e9291f0b4c9f1d414b8195435a24d980d0a2",
+                "reference": "7a87e9291f0b4c9f1d414b8195435a24d980d0a2",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/support": "^10.0|^9.0|^11.0",
+                "php": "^8.1",
+                "spatie/laravel-package-tools": "^1.4.3"
+            },
+            "require-dev": {
+                "brianium/paratest": "^6.2|^7.4",
+                "livewire/livewire": "^3.0",
+                "orchestra/testbench": "^8.0|^7.4|^9.0",
+                "pestphp/pest": "^2.34",
+                "phpunit/phpunit": "^9.3|^10.5",
+                "spatie/laravel-ray": "^1.9"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Christophrumpel\\MissingLivewireAssertions\\MissingLivewireAssertionsServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Christophrumpel\\MissingLivewireAssertions\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Christoph Rumpel",
+                    "email": "christoph@christoph-rumpel.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "This package adds missing livewire test assertions.",
+            "homepage": "https://github.com/christophrumpel/missing-livewire-assertions",
+            "keywords": [
+                "assertions",
+                "christophrumpel",
+                "laravel",
+                "livewire"
+            ],
+            "support": {
+                "issues": "https://github.com/christophrumpel/missing-livewire-assertions/issues",
+                "source": "https://github.com/christophrumpel/missing-livewire-assertions/tree/v2.9.1"
+            },
+            "time": "2024-11-04T09:03:03+00:00"
+        },
+        {
             "name": "doctrine/deprecations",
             "version": "1.1.4",
             "source": {
@@ -9845,6 +9910,66 @@
                 }
             ],
             "time": "2024-12-02T13:28:15+00:00"
+        },
+        {
+            "name": "spatie/laravel-package-tools",
+            "version": "1.18.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/spatie/laravel-package-tools.git",
+                "reference": "ba67eee37d86ed775dab7dad58a7cbaf9a6cfe78"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/spatie/laravel-package-tools/zipball/ba67eee37d86ed775dab7dad58a7cbaf9a6cfe78",
+                "reference": "ba67eee37d86ed775dab7dad58a7cbaf9a6cfe78",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/contracts": "^9.28|^10.0|^11.0",
+                "php": "^8.0"
+            },
+            "require-dev": {
+                "mockery/mockery": "^1.5",
+                "orchestra/testbench": "^7.7|^8.0|^9.0",
+                "pestphp/pest": "^1.22|^2",
+                "phpunit/phpunit": "^9.5.24|^10.5",
+                "spatie/pest-plugin-test-time": "^1.1|^2.2"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Spatie\\LaravelPackageTools\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Freek Van der Herten",
+                    "email": "freek@spatie.be",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Tools for creating Laravel packages",
+            "homepage": "https://github.com/spatie/laravel-package-tools",
+            "keywords": [
+                "laravel-package-tools",
+                "spatie"
+            ],
+            "support": {
+                "issues": "https://github.com/spatie/laravel-package-tools/issues",
+                "source": "https://github.com/spatie/laravel-package-tools/tree/1.18.3"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/spatie",
+                    "type": "github"
+                }
+            ],
+            "time": "2025-01-22T08:51:18+00:00"
         },
         {
             "name": "spatie/pest-plugin-test-time",

@@ -4,6 +4,7 @@ use App\Livewire\Customers\Index;
 use App\Models\{Customer, User};
 use Illuminate\Pagination\LengthAwarePaginator;
 use Livewire\Livewire;
+
 use function Pest\Laravel\{actingAs, get};
 
 it('should be able to access the route customers', function () {
@@ -151,4 +152,28 @@ it('should be able to paginate the list', function () {
 
             return true;
         });
+});
+
+it('should list archived items', function () {
+    actingAs(User::factory()->create());
+
+    $customer = Customer::factory()->count(2)->create();
+    $archived = Customer::factory()->deleted()->create();
+
+    Livewire::test(Index::class)
+        ->set('show_archived', false)
+        ->assertSet('items', function (LengthAwarePaginator $items) use ($archived) {
+            expect($items->items())->toHaveCount(2)
+                ->and(collect($items->items()))->filter(fn (Customer $customer) => $customer->id === $archived->id)->toBeEmpty();
+
+            return true;
+        })
+        ->set('show_archived', true)
+        ->assertSet('items', function (LengthAwarePaginator $items) use ($archived) {
+            expect($items->items())->toHaveCount(1)
+                ->and(collect($items->items()))->filter(fn (Customer $customer) => $customer->id === $archived->id)->not->toBeEmpty();
+
+            return true;
+        });
+
 });

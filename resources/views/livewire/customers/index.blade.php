@@ -23,7 +23,7 @@
                 </x-slot:trigger>
 
                 <x-menu-item @click.stop="">
-                    <x-toggle label="Archived" wire:model.live="showArchived"/>
+                    <x-toggle label="Archived" wire:model.live="show_archived"/>
                 </x-menu-item>
             </x-dropdown>
         </div>

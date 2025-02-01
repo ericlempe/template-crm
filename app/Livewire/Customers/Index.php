@@ -14,7 +14,7 @@ class Index extends Component
     use HasTable;
     use WithPagination;
 
-    public bool $showArchived = false;
+    public bool $show_archived = false;
 
     #[On('customer::archived')]
     #[On('customer::restored')]
@@ -26,7 +26,7 @@ class Index extends Component
     public function query(): Builder
     {
         return Customer::query()->when(
-            $this->showArchived,
+            $this->show_archived,
             fn (Builder $q) => $q->onlyTrashed()
         );
     }

@@ -4,7 +4,7 @@ namespace App\Livewire\Customers;
 
 use App\Models\Customer;
 use Illuminate\View\View;
-use Livewire\Attributes\{On, Rule};
+use Livewire\Attributes\{On};
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -13,9 +13,6 @@ class Archive extends Component
     use Toast;
 
     public ?Customer $customer = null;
-
-    #[Rule(['accepted'])]
-    public bool $confirmedArchiving = false;
 
     public bool $modal = false;
 
@@ -26,25 +23,17 @@ class Archive extends Component
 
     public function archive(): void
     {
-        $this->validate();
-
         $this->customer->delete();
 
-        $this->reset('confirmedArchiving', 'modal');
+        $this->reset('modal');
         $this->success('Customer archived successfully');
-        $this->dispatch('customer::archived');
+        $this->dispatch('customer::reload');
     }
 
     #[On('customer::archive')]
-    public function openConfimation(int $id)
+    public function confirmAction(int $id)
     {
         $this->customer = Customer::findOrFail($id);
         $this->modal    = true;
-    }
-
-    public function confirmArchiving()
-    {
-        $this->confirmedArchiving = true;
-        $this->archive();
     }
 }

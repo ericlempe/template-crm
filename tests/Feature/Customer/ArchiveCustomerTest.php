@@ -4,7 +4,7 @@ use App\Livewire\Customers\Archive;
 use App\Models\{Customer, User};
 use Livewire\Livewire;
 
-use function Pest\Laravel\{actingAs, assertNotSoftDeleted, assertSoftDeleted};
+use function Pest\Laravel\{actingAs, assertSoftDeleted};
 
 beforeEach(function () {
     actingAs(User::factory()->create());
@@ -15,24 +15,24 @@ it('should be able to archive a customer', function () {
 
     Livewire::test(Archive::class)
         ->set('customer', $customer)
-        ->set('confirmedArchiving', true)
         ->call('archive')
-        ->assertDispatched('customer::archived');
+        ->assertDispatched('customer::reload');
 
     assertSoftDeleted('customers', [
         'id' => $customer->id,
     ]);
 });
 
-it('should have a confirmation before archiving', function () {
+test('when confirming we should load the customer and set modal to true', function () {
     $customer = Customer::factory()->create();
 
     Livewire::test(Archive::class)
-        ->set('customer', $customer)
-        ->call('archive')
-        ->assertHasErrors(['confirmedArchiving' => 'accepted']);
+        ->call('confirmAction', $customer->id)
+        ->assertSet('customer.id', $customer->id)
+        ->assertSet('modal', true)
+        ->assertPropertyEntangled('modal');
+});
 
-    assertNotSoftDeleted('customers', [
-        'id' => $customer->id,
-    ]);
+test('making sure restore method is wired', function () {
+    Livewire::test(Archive::class)->assertMethodWired('archive');
 });

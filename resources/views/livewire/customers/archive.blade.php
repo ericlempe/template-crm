@@ -9,7 +9,7 @@
         </div>
         <x-slot:actions>
             <x-button label="Cancel" @click="$wire.modal = false"/>
-            <x-button label="Confirm" class="btn-primary" wire:click="confirmArchiving"/>
+            <x-button label="Confirm" class="btn-primary" wire:click="archive"/>
         </x-slot:actions>
     </x-modal>
 </div>

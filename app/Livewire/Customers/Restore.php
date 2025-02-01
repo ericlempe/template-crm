@@ -4,16 +4,13 @@ namespace App\Livewire\Customers;
 
 use App\Models\Customer;
 use Illuminate\View\View;
-use Livewire\Attributes\{On, Rule};
+use Livewire\Attributes\{On};
 use Livewire\Component;
 use Mary\Traits\Toast;
 
 class Restore extends Component
 {
     use Toast;
-
-    #[Rule(['accepted'])]
-    public bool $confirmed = false;
 
     public ?Customer $customer = null;
 
@@ -26,24 +23,17 @@ class Restore extends Component
 
     public function restore(): void
     {
-        $this->validate();
         $this->customer->restore();
 
-        $this->reset('confirmed', 'modal');
+        $this->reset('modal');
         $this->success('Customer restored successfully');
-        $this->dispatch('customer::restored');
+        $this->dispatch('customer::reload');
     }
 
     #[On('customer::restore')]
-    public function openModal(int $id): void
+    public function confirmAction(int $id): void
     {
         $this->customer = Customer::withTrashed()->find($id);
         $this->modal    = true;
-    }
-
-    public function confirmAction()
-    {
-        $this->confirmed = true;
-        $this->restore();
     }
 }

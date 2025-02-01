@@ -14,9 +14,13 @@ beforeEach(function () {
 it('should be able to create a customer', function () {
     Livewire::test(Create::class)
         ->set('name', 'John Doe')
+        ->assertPropertyWired('name')
         ->set('email', 'john.doe@email.com')
+        ->assertPropertyWired('email')
         ->set('phone', '1234567890')
+        ->assertPropertyWired('phone')
         ->call('save')
+        ->assertMethodWiredToForm('save')
         ->assertHasNoErrors()
         ->assertRedirectToRoute('customers');
 
@@ -24,6 +28,7 @@ it('should be able to create a customer', function () {
         'name'  => 'John Doe',
         'email' => 'john.doe@email.com',
         'phone' => '1234567890',
+        'type'  => 'customer',
     ]);
 });
 

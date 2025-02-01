@@ -16,8 +16,7 @@ class Index extends Component
 
     public bool $show_archived = false;
 
-    #[On('customer::archived')]
-    #[On('customer::restored')]
+    #[On('customer::reload')]
     public function render(): View
     {
         return view('livewire.customers.index');

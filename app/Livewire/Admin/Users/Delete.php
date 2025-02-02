@@ -5,7 +5,7 @@ namespace App\Livewire\Admin\Users;
 use App\Models\User;
 use App\Notifications\UserDeletedNotification;
 use Illuminate\Contracts\View\View;
-use Livewire\Attributes\{On, Rule};
+use Livewire\Attributes\{On, Validate};
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -13,7 +13,7 @@ class Delete extends Component
 {
     use Toast;
 
-    #[Rule(['accepted'])]
+    #[Validate(['accepted'])]
     public bool $confirmedDeletion = false;
 
     public ?User $user = null;

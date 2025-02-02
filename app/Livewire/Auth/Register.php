@@ -6,21 +6,21 @@ use App\Models\User;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Support\Facades\Event;
 use Illuminate\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Register extends Component
 {
-    #[Rule('required')]
+    #[Validate('required')]
     public ?string $name = null;
 
-    #[Rule(['required', 'email', 'unique:App\Models\User,email'])]
+    #[Validate(['required', 'email', 'unique:App\Models\User,email'])]
     public ?string $email = null;
 
-    #[Rule(['required', 'min:6', 'max:8', 'confirmed'])]
+    #[Validate(['required', 'min:6', 'max:8', 'confirmed'])]
     public ?string $password = null;
 
-    #[Rule('required')]
+    #[Validate('required')]
     public ?string $password_confirmation = null;
 
     public function submit(): void

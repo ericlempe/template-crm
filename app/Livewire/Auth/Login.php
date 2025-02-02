@@ -5,15 +5,15 @@ namespace App\Livewire\Auth;
 use Illuminate\Support\Facades\{Auth, RateLimiter};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Login extends Component
 {
-    #[Rule('required')]
+    #[Validate('required')]
     public ?string $email = null;
 
-    #[Rule('required')]
+    #[Validate('required')]
     public ?string $password = null;
 
     public function render(): View

@@ -4,7 +4,7 @@ namespace App\Livewire\Admin\Users;
 
 use App\Models\User;
 use App\Notifications\UserRestoredNotification;
-use Livewire\Attributes\{On, Rule};
+use Livewire\Attributes\{On, Validate};
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -12,7 +12,7 @@ class Restore extends Component
 {
     use Toast;
 
-    #[Rule(['accepted'])]
+    #[Validate(['accepted'])]
     public bool $confirmedRestoration = false;
 
     public ?User $user = null;

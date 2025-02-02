@@ -5,12 +5,12 @@ namespace App\Livewire\Admin\Users;
 use App\Enums\Can;
 use App\Models\User;
 use Exception;
-use Livewire\Attributes\{On, Rule};
+use Livewire\Attributes\{On, Validate};
 use Livewire\Component;
 
 class Impersonate extends Component
 {
-    #[Rule(['accepted'])]
+    #[Validate(['accepted'])]
     public bool $confirmedImpersonation = false;
 
     public ?User $user = null;

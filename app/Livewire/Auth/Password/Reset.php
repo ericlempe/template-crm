@@ -7,21 +7,21 @@ use Illuminate\Auth\Events\PasswordReset;
 use Illuminate\Support\Facades\{DB, Hash, Password};
 use Illuminate\Support\Str;
 use Illuminate\View\View;
-use Livewire\Attributes\{Computed, Rule};
+use Livewire\Attributes\{Computed, Validate};
 use Livewire\Component;
 
 class Reset extends Component
 {
-    #[Rule(['required'])]
+    #[Validate(['required'])]
     public ?string $token = null;
 
-    #[Rule(['required', 'email', 'confirmed'])]
+    #[Validate(['required', 'email', 'confirmed'])]
     public ?string $email = null;
 
-    #[Rule(['required', 'email'])]
+    #[Validate(['required', 'email'])]
     public ?string $email_confirmation = null;
 
-    #[Rule(['required', 'confirmed'])]
+    #[Validate(['required', 'confirmed'])]
     public ?string $password = null;
 
     public ?string $password_confirmation = null;

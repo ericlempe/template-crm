@@ -4,12 +4,12 @@ namespace App\Livewire\Auth\Password;
 
 use Illuminate\Support\Facades\Password;
 use Illuminate\View\View;
-use Livewire\Attributes\Rule;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Recovery extends Component
 {
-    #[Rule(['required', 'email'])]
+    #[Validate(['required', 'email'])]
     public ?string $email = null;
 
     public ?string $message = null;

@@ -9,12 +9,12 @@ use App\Rules\CodeValidation;
 use Carbon\Carbon;
 use Exception;
 use Illuminate\View\View;
-use Livewire\Attributes\{Layout, On, Rule};
+use Livewire\Attributes\{Layout, On, Validate};
 use Livewire\Component;
 
 class EmailValidation extends Component
 {
-    #[Rule(new CodeValidation())]
+    #[Validate(new CodeValidation())]
     public ?string $code = null;
 
     public ?Carbon $dateResendAllowed = null;

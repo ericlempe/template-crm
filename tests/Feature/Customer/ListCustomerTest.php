@@ -180,6 +180,7 @@ it('should list archived items', function () {
 test('check if all actions components  is in the page', function () {
     Livewire::test(Index::class)
         ->assertContainsLivewireComponent('customers.create')
+        ->assertContainsLivewireComponent('customers.update')
         ->assertContainsLivewireComponent('customers.archive')
         ->assertContainsLivewireComponent('customers.restore');
 });

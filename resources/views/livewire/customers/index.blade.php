@@ -53,6 +53,16 @@
         @scope('actions', $customer)
 
         <div class="flex space-x-1">
+            <x-button
+                id="btn-update-customer-{{ $customer->id }}"
+                wire:key="btn-update-customer-{{ $customer->id }}"
+                icon="o-pencil"
+                @click="$dispatch('customer::update', { id: '{{ $customer->id }}' })"
+                class="btn-sm btn-ghost"
+                tooltip="{{ __('Edit Customer') }}"
+                spinner
+            />
+
             @unless($customer->trashed())
                 <x-button
                     id="btn-archive-customer-{{ $customer->id }}"
@@ -81,6 +91,7 @@
     {{ $this->items->links(data: ['scrollTo' => false]) }}
 
     <livewire:customers.create/>
+    <livewire:customers.update/>
     <livewire:customers.archive/>
     <livewire:customers.restore/>
 </div>

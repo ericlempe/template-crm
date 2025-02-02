@@ -13,12 +13,12 @@ beforeEach(function () {
 
 it('should be able to create a customer', function () {
     Livewire::test(Create::class)
-        ->set('name', 'John Doe')
-        ->assertPropertyWired('name')
-        ->set('email', 'john.doe@email.com')
-        ->assertPropertyWired('email')
-        ->set('phone', '1234567890')
-        ->assertPropertyWired('phone')
+        ->set('form.name', 'John Doe')
+        ->assertPropertyWired('form.name')
+        ->set('form.email', 'john.doe@email.com')
+        ->assertPropertyWired('form.email')
+        ->set('form.phone', '1234567890')
+        ->assertPropertyWired('form.phone')
         ->call('save')
         ->assertMethodWiredToForm('save')
         ->assertHasNoErrors()
@@ -35,27 +35,27 @@ it('should be able to create a customer', function () {
 describe('validations', function () {
     it('should be able to check if the email is valid', function () {
         Livewire::test(Create::class)
-            ->set('name', 'John Doe')
-            ->set('email', 'invalid-email')
+            ->set('form.name', 'John Doe')
+            ->set('form.email', 'invalid-email')
             ->call('save')
-            ->assertHasErrors(['email' => 'email']);
+            ->assertHasErrors(['form.email' => 'email']);
 
         Livewire::test(Create::class)
-            ->set('name', 'John Doe')
-            ->set('email', 'johndoe@example.com')
+            ->set('form.name', 'John Doe')
+            ->set('form.email', 'johndoe@example.com')
             ->call('save')
-            ->assertHasNoErrors(['email' => 'email']);
+            ->assertHasNoErrors(['form.email' => 'email']);
     });
 
     it('should be able to check if the email already exists', function () {
         Customer::factory()->create(['email' => 'johndoe@example.com']);
 
         Livewire::test(Create::class)
-            ->set('name', 'John doe')
-            ->set('email', 'johndoe@example.com')
+            ->set('form.name', 'John doe')
+            ->set('form.email', 'johndoe@example.com')
             ->call('save')
             ->assertHasErrors([
-                'email' => 'unique',
+                'form.email' => 'unique',
             ]);
     });
 
@@ -64,15 +64,15 @@ describe('validations', function () {
             ->set($field, '')
             ->call('save')
             ->assertHasErrors([$field => 'required']);
-    })->with(['name', 'email']);
+    })->with(['form.name', 'form.email']);
 
     test('rules name field', function ($name, $rule) {
         Livewire::test(Create::class)
-            ->set('name', $name)
-            ->set('email', 'johndoe@example.com')
+            ->set('form.name', $name)
+            ->set('form.email', 'johndoe@example.com')
             ->call('save')
             ->assertHasErrors([
-                'name' => $rule,
+                'form.name' => $rule,
             ]);
     })->with([
         'min validation' => ['Jo', 'min:3'],

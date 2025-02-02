@@ -2,9 +2,8 @@
 
 namespace App\Livewire\Customers;
 
-use App\Models\Customer;
 use Illuminate\View\View;
-use Livewire\Attributes\{On, Rule};
+use Livewire\Attributes\{On};
 use Livewire\Component;
 use Mary\Traits\Toast;
 
@@ -12,13 +11,7 @@ class Create extends Component
 {
     use Toast;
 
-    #[Rule(['required', 'min:3', 'max:255'])]
-    public ?string $name = '';
-
-    #[Rule(['required', 'email', 'unique:App\Models\Customer,email'])]
-    public ?string $email = '';
-
-    public ?string $phone = null;
+    public Form $form;
 
     public bool $modal = false;
 
@@ -29,15 +22,7 @@ class Create extends Component
 
     public function save(): void
     {
-        $this->validate();
-
-        Customer::create([
-            'type'  => 'customer',
-            'name'  => $this->name,
-            'email' => $this->email,
-            'phone' => $this->phone,
-        ]);
-
+        $this->form->create();
         $this->success('Customer created successfully');
         $this->reset('modal');
         $this->dispatch('customer::reload');

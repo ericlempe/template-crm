@@ -12,7 +12,7 @@ class Update extends Component
 {
     use Toast;
 
-    public ?Customer $customer = null;
+    public Form $form;
 
     public bool $modal = false;
 
@@ -21,29 +21,19 @@ class Update extends Component
         return view('livewire.customers.update');
     }
 
-    public function rules(): array
-    {
-        return [
-            'customer.name'  => ['required', 'min:3', 'max:255'],
-            'customer.email' => ['required', 'email', 'max:255', 'unique:App\Models\Customer,email,' . $this->customer->id],
-            'customer.phone' => ['nullable'],
-        ];
-    }
-
     public function save(): void
     {
-        $this->validate();
-
-        $this->customer->update();
-
+        $this->form->update();
         $this->success('Customer updated successfully');
         $this->reset('modal');
         $this->dispatch('customer::reload');
     }
 
     #[On('customer::update')]
-    public function open()
+    public function load(int $id)
     {
+        $customer = Customer::find($id);
+        $this->form->setCustomer($customer);
         $this->resetErrorBag();
         $this->modal = true;
     }

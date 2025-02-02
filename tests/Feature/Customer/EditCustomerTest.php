@@ -13,13 +13,13 @@ beforeEach(function () {
 
 it('should be able to update a customer', function () {
     Livewire::test(Update::class)
-        ->set('customer', $this->customer)
-        ->set('customer.name', 'John Doe')
-        ->assertPropertyWired('customer.name')
-        ->set('customer.email', 'john.doe@email.com')
-        ->assertPropertyWired('customer.email')
-        ->set('customer.phone', '1234567890')
-        ->assertPropertyWired('customer.phone')
+        ->call('load', $this->customer->id)
+        ->set('form.name', 'John Doe')
+        ->assertPropertyWired('form.name')
+        ->set('form.email', 'john.doe@email.com')
+        ->assertPropertyWired('form.email')
+        ->set('form.phone', '1234567890')
+        ->assertPropertyWired('form.phone')
         ->call('save')
         ->assertMethodWiredToForm('save')
         ->assertHasNoErrors()
@@ -37,60 +37,60 @@ it('should be able to update a customer', function () {
 describe('validations', function () {
     it('should be able to check if the email is valid', function () {
         Livewire::test(Update::class)
-            ->set('customer', $this->customer)
-            ->set('customer.name', 'John Doe')
-            ->set('customer.email', 'invalid-email')
-            ->set('customer.phone', '1234567890')
+            ->call('load', $this->customer->id)
+            ->set('form.name', 'John Doe')
+            ->set('form.email', 'invalid-email')
+            ->set('form.phone', '1234567890')
             ->call('save')
-            ->assertHasErrors(['customer.email' => 'email']);
+            ->assertHasErrors(['form.email' => 'email']);
 
         Livewire::test(Update::class)
-            ->set('customer', $this->customer)
-            ->set('customer.name', 'John Doe')
-            ->set('customer.email', 'johndoe@example.com')
-            ->set('customer.phone', '1234567890')
+            ->call('load', $this->customer->id)
+            ->set('form.name', 'John Doe')
+            ->set('form.email', 'johndoe@example.com')
+            ->set('form.phone', '1234567890')
             ->call('save')
-            ->assertHasNoErrors(['customer.email' => 'email']);
+            ->assertHasNoErrors(['form.email' => 'email']);
     });
 
     it('should be able to check if the email already exists', function () {
         $anotherCustomer = Customer::factory()->create();
 
         Livewire::test(Update::class)
-            ->set('customer', $this->customer)
-            ->set('customer.name', 'John Doe')
-            ->set('customer.email', $anotherCustomer->email)
-            ->set('customer.phone', '1234567890')
+            ->call('load', $this->customer->id)
+            ->set('form.name', 'John Doe')
+            ->set('form.email', $anotherCustomer->email)
+            ->set('form.phone', '1234567890')
             ->call('save')
-            ->assertHasErrors(['customer.email' => 'unique']);
+            ->assertHasErrors(['form.email' => 'unique']);
     });
 
     it('should be able to update the same email', function () {
         Livewire::test(Update::class)
-            ->set('customer', $this->customer)
-            ->set('customer.name', $this->customer->name)
-            ->set('customer.email', $this->customer->email)
-            ->set('customer.phone', $this->customer->phone)
+            ->call('load', $this->customer->id)
+            ->set('form.name', $this->customer->name)
+            ->set('form.email', $this->customer->email)
+            ->set('form.phone', $this->customer->phone)
             ->call('save')
-            ->assertHasNoErrors(['customer.email' => 'unique']);
+            ->assertHasNoErrors(['form.email' => 'unique']);
     });
 
     test('required fields', function ($field) {
         Livewire::test(Update::class)
-            ->set('customer', $this->customer)
+            ->call('load', $this->customer->id)
             ->set($field, '')
             ->call('save')
             ->assertHasErrors([$field => 'required']);
-    })->with(['customer.name', 'customer.email']);
+    })->with(['form.name', 'form.email']);
 
     test('rules name field', function ($name, $rule) {
         Livewire::test(Update::class)
-            ->set('customer', $this->customer)
-            ->set('customer.name', $name)
-            ->set('customer.email', 'johndoe@example.com')
+            ->call('load', $this->customer->id)
+            ->set('form.name', $name)
+            ->set('form.email', 'johndoe@example.com')
             ->call('save')
             ->assertHasErrors([
-                'customer.name' => $rule,
+                'form.name' => $rule,
             ]);
     })->with([
         'min validation' => ['Jo', 'min:3'],

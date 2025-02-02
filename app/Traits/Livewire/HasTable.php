@@ -2,14 +2,13 @@
 
 namespace App\Traits\Livewire;
 
-use App\Models\Customer;
 use App\Support\Table\Header;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Livewire\Attributes\Computed;
 
 /**
- * @property-read LengthAwarePaginator|Customer[] $items
+ * @property-read LengthAwarePaginator $items
  * @property-read array $headers
  */
 trait HasTable

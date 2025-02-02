@@ -2,13 +2,12 @@
 
 use App\Enums\Can;
 use App\Http\Middleware\ShouldBeVerified;
-use App\Livewire\Admin\{Dashboard, Users};
 use App\Livewire\Auth\{EmailValidation, Login, Password, Register};
-use App\Livewire\Customers\{Index};
-use App\Livewire\Welcome;
+use App\Livewire\{Admin, Customers, Opportunities, Welcome};
+
 use Illuminate\Support\Facades\Route;
 
-//region Guest
+// region Guest
 Route::redirect('/', '/login');
 Route::get('/login', Login::class)->name('login')->middleware('guest');
 Route::get('/register', Register::class)->name('auth.register')->middleware('guest');
@@ -16,22 +15,26 @@ Route::get('/email-validation', EmailValidation::class)->name('auth.email-valida
 Route::get('/logout', fn () => auth()->logout())->name('auth.logout');
 Route::get('/password/recovery', Password\Recovery::class)->name('password.recovery');
 Route::get('/password/reset', Password\Reset::class)->name('password.reset');
-//endregion
+// endregion
 
-//region Authenticated
+// region Authenticated
 Route::middleware(['auth', ShouldBeVerified::class])->group(function () {
     Route::get('/dashboard', Welcome::class)->name('dashboard');
 
-    //region Customers
-    Route::get('/customers', Index::class)->name('customers');
-    //endregion
+    // region Customers
+    Route::get('/customers', Customers\Index::class)->name('customers');
+    // endregion
 
-    //region Admin
+    // region Opportunities
+    Route::get('/opportunities', Opportunities\Index::class)->name('opportunities');
+    // endregion
+
+    // region Admin
     Route::prefix('/admin')->middleware('can:' . Can::BE_AN_ADMIN->value)->group(function () {
-        Route::get('/dashboard', Dashboard::class)->name('admin.dashboard');
+        Route::get('/dashboard', Admin\Dashboard::class)->name('admin.dashboard');
 
-        Route::get('/users', Users\Index::class)->name('admin.users');
+        Route::get('/users', Admin\Users\Index::class)->name('admin.users');
     });
-    //endregion
+    // endregion
 });
-//endregion
+// endregion

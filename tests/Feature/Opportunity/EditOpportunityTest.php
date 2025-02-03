@@ -18,7 +18,7 @@ it('should be able to update a opportunity', function () {
         ->assertPropertyWired('form.title')
         ->set('form.status', 'open')
         ->assertPropertyWired('form.status')
-        ->set('form.amount', '10000')
+        ->set('form.amount', '1230.45')
         ->assertPropertyWired('form.amount')
         ->call('save')
         ->assertMethodWiredToForm('save')
@@ -29,7 +29,7 @@ it('should be able to update a opportunity', function () {
         'id'     => $this->opportunity->id,
         'title'  => 'Opportunity 1',
         'status' => 'open',
-        'amount' => '10000',
+        'amount' => '123045',
     ]);
 });
 

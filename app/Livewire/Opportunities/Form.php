@@ -3,26 +3,21 @@
 namespace App\Livewire\Opportunities;
 
 use App\Models\Opportunity;
+use Livewire\Attributes\Validate;
 use Livewire\Form as BaseForm;
 
 class Form extends BaseForm
 {
     public ?Opportunity $opportunity = null;
 
-    public ?string $title = '';
+    #[Validate(['required', 'min:3', 'max:255'])]
+    public string $title = '';
 
-    public ?string $status = '';
+    #[Validate(['required', 'in:open,won,lost'])]
+    public string $status = '';
 
-    public ?int $amount = 0;
-
-    public function rules(): array
-    {
-        return [
-            'title'  => ['required', 'min:3', 'max:255'],
-            'status' => ['required'],
-            'amount' => ['required'],
-        ];
-    }
+    #[Validate(['required', 'numeric'])]
+    public ?int $amount = null;
 
     public function create(): void
     {

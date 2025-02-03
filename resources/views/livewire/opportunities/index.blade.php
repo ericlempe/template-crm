@@ -41,7 +41,7 @@
         @scope('header_status', $header)
         <x-table.th :$header name="status"/>
         @endscope
-        
+
         @scope('header_amount', $header)
         <x-table.th :$header name="amount"/>
         @endscope

@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Opportunity;
+use App\Traits\Factory\HasDeleted;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -10,6 +11,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class OpportunityFactory extends Factory
 {
+    use HasDeleted;
+
     /**
      * Define the model's default state.
      *
@@ -22,12 +25,5 @@ class OpportunityFactory extends Factory
             'status' => $this->faker->randomElement(['open', 'won', 'lost']),
             'amount' => $this->faker->numberBetween(1000, 10000),
         ];
-    }
-
-    public function deleted($deleted_by = null): static
-    {
-        return $this->state(fn (array $attributes) => [
-            'deleted_at' => now(),
-        ]);
     }
 }

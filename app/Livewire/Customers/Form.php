@@ -10,11 +10,11 @@ class Form extends BaseForm
 {
     public ?Customer $customer = null;
 
-    public ?string $name = '';
+    public string $name = '';
 
-    public ?string $email = '';
+    public string $email = '';
 
-    public ?string $phone = null;
+    public string $phone = '';
 
     public function rules(): array
     {

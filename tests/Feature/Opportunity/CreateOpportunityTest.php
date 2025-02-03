@@ -50,4 +50,15 @@ describe('validations', function () {
         'min validation' => ['Jo', 'min:3'],
         'max validation' => [str_repeat('a', 256), 'max:255'],
     ]);
+
+    test('rules status field', function ($status, $rule) {
+        Livewire::test(Create::class)
+            ->set('form.status', $status)
+            ->call('save')
+            ->assertHasErrors([
+                'form.status' => $rule,
+            ]);
+    })->with([
+        'in' => ['invalid-status', 'in'],
+    ]);
 });

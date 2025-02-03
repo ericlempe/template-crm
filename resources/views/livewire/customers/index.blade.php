@@ -30,6 +30,9 @@
     </div>
 
     <x-table :headers="$this->headers" :rows="$this->items">
+        <x-slot:empty>
+            <x-icon name="o-face-frown" label="No records found"/>
+        </x-slot:empty>
         @scope('header_id', $header)
         <x-table.th :$header name="id"/>
         @endscope

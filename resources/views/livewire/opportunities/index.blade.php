@@ -53,6 +53,22 @@
         <x-table.th :$header name="created_at"/>
         @endscope
 
+        @scope('cell_status', $opportunity)
+        <x-badge
+            :value="$opportunity->status"
+            @class([
+                'badge-outline badge-sm',
+                'bg-info' => $opportunity->status === 'open',
+                'bg-success' => $opportunity->status === 'won',
+                'bg-error' => $opportunity->status === 'lost',
+            ])
+        />
+        @endscope
+
+        @scope('cell_amount', $opportunity)
+        <span class="text-nowrap">$ {{ number_format($opportunity->amount / 100, 2) }}</span>
+        @endscope
+
         @scope('cell_created_at', $opportunity)
         {{ $opportunity->created_at->format('d/m/Y') }}
         @endscope

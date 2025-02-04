@@ -25,6 +25,8 @@ class OpportunityFactory extends Factory
             'title'       => $this->faker->sentence,
             'status'      => $this->faker->randomElement(['open', 'won', 'lost']),
             'amount'      => $this->faker->numberBetween(1000, 10000),
+            'created_at'  => now(),
+            'updated_at'  => now(),
         ];
     }
 }

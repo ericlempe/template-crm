@@ -2,6 +2,7 @@
     <x-drawer wire:model="modal" class="w-11/12 lg:w-1/3" title="Create Customer" right>
         <x-form wire:submit="save" id="form-opportunity-create">
             <x-input label="Title" placeholder="Enter title" wire:model="form.title"/>
+            <x-input label="Title" placeholder="Enter custom" wire:model="form.customer_id"/>
             <x-select
                 label="Status"
                 :options="$this->status"

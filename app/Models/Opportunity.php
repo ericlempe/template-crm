@@ -18,5 +18,6 @@ class Opportunity extends Model
         'title',
         'status',
         'amount',
+        'customer_id',
     ];
 }

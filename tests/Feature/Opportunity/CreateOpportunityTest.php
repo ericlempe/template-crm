@@ -1,7 +1,7 @@
 <?php
 
 use App\Livewire\Opportunities\Create;
-use App\Models\{User};
+use App\Models\{Customer, User};
 use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs, assertDatabaseHas};
@@ -9,12 +9,14 @@ use function Pest\Laravel\{actingAs, assertDatabaseHas};
 beforeEach(function () {
     $user = User::factory()->create();
     actingAs($user);
+    $this->customer = Customer::factory()->create();
 });
 
 it('should be able to create a oppotunity', function () {
     Livewire::test(Create::class)
+        ->set('form.customer_id', $this->customer->id)
+        ->assertPropertyWired('form.customer_id')
         ->set('form.title', 'Opportunity Title')
-        ->assertPropertyWired('form.title')
         ->set('form.status', 'open')
         ->assertPropertyWired('form.status')
         ->set('form.amount', '1230.45')
@@ -25,9 +27,10 @@ it('should be able to create a oppotunity', function () {
         ->assertDispatched('opportunity::reload');
 
     assertDatabaseHas('opportunities', [
-        'title'  => 'Opportunity Title',
-        'status' => 'open',
-        'amount' => '123045',
+        'customer_id' => $this->customer->id,
+        'title'       => 'Opportunity Title',
+        'status'      => 'open',
+        'amount'      => '123045',
     ]);
 });
 
@@ -37,7 +40,18 @@ describe('validations', function () {
             ->set($field, '')
             ->call('save')
             ->assertHasErrors([$field => 'required']);
-    })->with(['form.title', 'form.status', 'form.amount']);
+    })->with(['form.customer_id', 'form.title', 'form.status', 'form.amount']);
+
+    test('rules customer_id field', function ($rule) {
+        Livewire::test(Create::class)
+            ->set('form.customer_id', 99999)
+            ->call('save')
+            ->assertHasErrors([
+                'form.customer_id' => $rule,
+            ]);
+    })->with([
+        'exists' => ['exists:customers,id'],
+    ]);
 
     test('rules title field', function ($title, $rule) {
         Livewire::test(Create::class)

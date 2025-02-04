@@ -1,7 +1,7 @@
 <?php
 
 use App\Livewire\Opportunities\Update;
-use App\Models\{Opportunity, User};
+use App\Models\{Customer, Opportunity, User};
 use Livewire\Livewire;
 
 use function Pest\Laravel\{actingAs, assertDatabaseHas};
@@ -9,11 +9,14 @@ use function Pest\Laravel\{actingAs, assertDatabaseHas};
 beforeEach(function () {
     actingAs(User::factory()->create());
     $this->opportunity = Opportunity::factory()->create();
+    $this->customer    = Customer::factory()->create();
 });
 
 it('should be able to update a opportunity', function () {
     Livewire::test(Update::class)
         ->call('load', $this->opportunity->id)
+        ->set('form.customer_id', $this->customer->id)
+        ->assertPropertyWired('form.customer_id')
         ->set('form.title', 'Opportunity 1')
         ->assertPropertyWired('form.title')
         ->set('form.status', 'open')
@@ -26,10 +29,11 @@ it('should be able to update a opportunity', function () {
         ->assertDispatched('opportunity::reload');
 
     assertDatabaseHas('opportunities', [
-        'id'     => $this->opportunity->id,
-        'title'  => 'Opportunity 1',
-        'status' => 'open',
-        'amount' => '123045',
+        'id'          => $this->opportunity->id,
+        'customer_id' => $this->customer->id,
+        'title'       => 'Opportunity 1',
+        'status'      => 'open',
+        'amount'      => '123045',
     ]);
 });
 
@@ -40,7 +44,19 @@ describe('validations', function () {
             ->set($field, '')
             ->call('save')
             ->assertHasErrors([$field => 'required']);
-    })->with(['form.title', 'form.status', 'form.amount']);
+    })->with(['form.customer_id', 'form.title', 'form.status', 'form.amount']);
+
+    test('rules customer_id field', function ($rule) {
+        Livewire::test(Update::class)
+            ->call('load', $this->opportunity->id)
+            ->set('form.customer_id', 99999)
+            ->call('save')
+            ->assertHasErrors([
+                'form.customer_id' => $rule,
+            ]);
+    })->with([
+        'exists' => ['exists:customers,id'],
+    ]);
 
     test('rules title field', function ($title, $rule) {
         Livewire::test(Update::class)

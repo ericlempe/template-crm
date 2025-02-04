@@ -67,9 +67,9 @@
         @endscope
 
         @scope('cell_amount', $opportunity)
-        <span class="text-nowrap">
+        <div class="whitespace-nowrap text-right">
             $ {{ number_format($opportunity->amount / 100, 2) }}
-        </span>
+        </div>
         @endscope
 
         @scope('cell_created_at', $opportunity)

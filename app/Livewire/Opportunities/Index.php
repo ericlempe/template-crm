@@ -25,21 +25,22 @@ class Index extends Component
 
     public function query(): Builder
     {
-        return Opportunity::query()->when(
-            $this->show_archived,
-            fn (Builder $q) => $q->onlyTrashed()
-        );
+        return Opportunity::query()
+            ->select(['opportunities.*', 'customers.name as customer_name'])
+            ->join('customers', 'customers.id', '=', 'opportunities.customer_id')
+            ->when($this->show_archived, fn (Builder $q) => $q->onlyTrashed());
     }
 
     public function searchColumns(): array
     {
-        return ['title'];
+        return ['title', 'customers.name', 'status'];
     }
 
     public function tableHeaders(): array
     {
         return [
             Header::make('id', '#'),
+            Header::make('customer_name', 'Customer'),
             Header::make('title', 'Title'),
             Header::make('status', 'Status'),
             Header::make('amount', 'Amount'),

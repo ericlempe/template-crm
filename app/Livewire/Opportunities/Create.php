@@ -32,6 +32,7 @@ class Create extends Component
     public function open()
     {
         $this->resetErrorBag();
+        $this->form->searchCostumers();
         $this->modal = true;
     }
 
@@ -43,5 +44,10 @@ class Create extends Component
             ['id' => 'won', 'name' => 'Won'],
             ['id' => 'lost', 'name' => 'Lost'],
         ];
+    }
+
+    public function search(string $value = ''): void
+    {
+        $this->form->searchCostumers($value);
     }
 }

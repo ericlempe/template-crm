@@ -2,7 +2,7 @@
 
 namespace App\Livewire\Opportunities;
 
-use App\Models\Opportunity;
+use App\Models\{Opportunity};
 use Illuminate\View\View;
 use Livewire\Attributes\{Computed, On};
 use Livewire\Component;
@@ -35,6 +35,7 @@ class Update extends Component
         $opportunity = Opportunity::find($id);
         $this->form->setOpportunity($opportunity);
         $this->resetErrorBag();
+        $this->form->searchCostumers();
         $this->modal = true;
     }
 
@@ -46,5 +47,10 @@ class Update extends Component
             ['id' => 'won', 'name' => 'Won'],
             ['id' => 'lost', 'name' => 'Lost'],
         ];
+    }
+
+    public function search(string $value = ''): void
+    {
+        $this->form->searchCostumers($value);
     }
 }

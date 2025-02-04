@@ -2,13 +2,16 @@
 
 namespace App\Livewire\Opportunities;
 
-use App\Models\Opportunity;
+use App\Models\{Customer, Opportunity};
+use Illuminate\Database\Eloquent\Collection;
 use Livewire\Attributes\Validate;
 use Livewire\Form as BaseForm;
 
 class Form extends BaseForm
 {
     public ?Opportunity $opportunity = null;
+
+    public Collection|array $customers = [];
 
     #[Validate(['required', 'min:3', 'max:255'])]
     public string $title = '';
@@ -53,6 +56,7 @@ class Form extends BaseForm
         $this->title       = $opportunity->title;
         $this->status      = $opportunity->status;
         $this->amount      = (string) ($opportunity->amount / 100);
+        $this->searchCostumers();
     }
 
     private function getAmountAsInt(): int
@@ -64,5 +68,15 @@ class Form extends BaseForm
         }
 
         return (int) ((float) $amount * 100);
+    }
+
+    public function searchCostumers(string $value = ''): void
+    {
+        $this->customers = Customer::query()
+            ->where('name', 'like', "%$value%")
+            ->take(5)
+            ->orderBy('name')
+            ->get(['id', 'name'])
+            ->when(filled($this->customer_id), fn ($q) => $q->merge(Customer::query()->whereId($this->customer_id)->get(['id', 'name'])));
     }
 }

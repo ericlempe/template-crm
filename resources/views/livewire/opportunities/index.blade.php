@@ -33,6 +33,7 @@
         <x-slot:empty>
             <x-icon name="o-face-frown" label="No records found"/>
         </x-slot:empty>
+
         @scope('header_id', $header)
         <x-table.th :$header name="id"/>
         @endscope
@@ -66,7 +67,9 @@
         @endscope
 
         @scope('cell_amount', $opportunity)
-        <span class="text-nowrap">$ {{ number_format($opportunity->amount / 100, 2) }}</span>
+        <span class="text-nowrap">
+            $ {{ number_format($opportunity->amount / 100, 2) }}
+        </span>
         @endscope
 
         @scope('cell_created_at', $opportunity)
@@ -74,7 +77,6 @@
         @endscope
 
         @scope('actions', $opportunity)
-
         <div class="flex space-x-1">
             <x-button
                 id="btn-update-opportunity-{{ $opportunity->id }}"

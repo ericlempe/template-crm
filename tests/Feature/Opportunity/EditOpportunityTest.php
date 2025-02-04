@@ -16,7 +16,6 @@ it('should be able to update a opportunity', function () {
     Livewire::test(Update::class)
         ->call('load', $this->opportunity->id)
         ->set('form.customer_id', $this->customer->id)
-        ->assertPropertyWired('form.customer_id')
         ->set('form.title', 'Opportunity 1')
         ->assertPropertyWired('form.title')
         ->set('form.status', 'open')

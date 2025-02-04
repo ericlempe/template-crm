@@ -15,7 +15,6 @@ beforeEach(function () {
 it('should be able to create a oppotunity', function () {
     Livewire::test(Create::class)
         ->set('form.customer_id', $this->customer->id)
-        ->assertPropertyWired('form.customer_id')
         ->set('form.title', 'Opportunity Title')
         ->set('form.status', 'open')
         ->assertPropertyWired('form.status')

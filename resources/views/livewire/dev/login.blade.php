@@ -1,4 +1,6 @@
-<div class="flex flex-col space-y-3 mb-3 px-3">
-    <x-select class="select-sm" icon="o-user" :options="$this->users" wire:model="selectedUser" placeholder="Select and user"/>
-    <x-button label="Login" class="btn-primary btn-sm" wire:click="login" />
+<div class="flex items-center space-x-2">
+    <x-select class="select-sm" icon="o-user" :options="$this->users" wire:model="selectedUser"
+              placeholder="Select an user"/>
+
+    <x-button class="btn-sm" wire:click="login">Login</x-button>
 </div>

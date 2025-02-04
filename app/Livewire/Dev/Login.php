@@ -8,6 +8,9 @@ use Illuminate\View\View;
 use Livewire\Attributes\Computed;
 use Livewire\Component;
 
+/**
+ * @property-read Collection|User[] $users
+ */
 class Login extends Component
 {
     public ?int $selectedUser = null;

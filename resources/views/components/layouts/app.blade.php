@@ -16,6 +16,10 @@
     <livewire:admin.users.stop-impersonate/>
 @endif
 
+@if(!app()->environment('production'))
+    <x-devbar/>
+@endif
+
 {{-- NAVBAR mobile only --}}
 <x-nav sticky class="md:hidden">
     <x-slot:brand>
@@ -35,10 +39,6 @@
 <x-main full-width>
     {{-- SIDEBAR --}}
     <x-slot:sidebar drawer="main-drawer" collapsible class="pt-3 bg-sky-800 text-white">
-
-        @if(!app()->environment('production'))
-            <livewire:dev.login/>
-        @endif
 
         <!-- Hidden when collapsed -->
         <div class="hidden-when-collapsed ml-5 font-black text-4xl text-yellow-500">mary</div>

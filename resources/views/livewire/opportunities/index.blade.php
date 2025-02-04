@@ -58,7 +58,7 @@
         <x-badge
             :value="$opportunity->status"
             @class([
-                'badge-outline badge-sm',
+                'text-black',
                 'bg-info' => $opportunity->status === 'open',
                 'bg-success' => $opportunity->status === 'won',
                 'bg-error' => $opportunity->status === 'lost',

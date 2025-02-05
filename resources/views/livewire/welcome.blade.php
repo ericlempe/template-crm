@@ -1,3 +1,3 @@
-<div>
-    <h1>Hello</h1>
+<div class="p-2 h-dvh">
+    <livewire:opportunities.board/>
 </div>

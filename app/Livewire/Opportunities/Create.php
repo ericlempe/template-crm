@@ -36,7 +36,7 @@ class Create extends Component
         $this->modal = true;
     }
 
-    #[Computed('status')]
+    #[Computed]
     public function status(): array
     {
         return [

@@ -39,7 +39,7 @@ class Update extends Component
         $this->modal = true;
     }
 
-    #[Computed('status')]
+    #[Computed]
     public function status(): array
     {
         return [

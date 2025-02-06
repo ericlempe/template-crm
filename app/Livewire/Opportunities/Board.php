@@ -30,7 +30,6 @@ class Board extends Component
 
     public function updateOpportunityOrder($data)
     {
-        ds($data);
 
         $order = collect();
 

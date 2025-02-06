@@ -1,4 +1,5 @@
 import './bootstrap';
+import 'livewire-sortable'
 
 document.addEventListener('alpine:init', () => {
     Alpine.data('timer', (minutes) => ({

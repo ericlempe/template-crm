@@ -14,7 +14,7 @@ class OpportunitySeeder extends Seeder
     {
         $oppotunities = [];
 
-        for ($i = 1; $i <= 5; $i++) {
+        for ($i = 1; $i <= 100; $i++) {
             $oppotunities[] = Opportunity::factory()->make([
                 'customer_id' => rand(1, 70),
             ])->toArray();

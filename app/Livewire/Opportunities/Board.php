@@ -11,6 +11,9 @@ use Livewire\Component;
 
 /**
  * @property-read Collection|Opportunity[] $opportunities
+ * @property-read Collection|Opportunity[] $opens
+ * @property-read Collection|Opportunity[] $wons
+ * @property-read Collection|Opportunity[] $losts
  */
 class Board extends Component
 {
@@ -28,34 +31,50 @@ class Board extends Component
             ->get();
     }
 
+    #[Computed]
+    public function opens(): Collection
+    {
+        return $this->opportunities->where('status', 'open');
+    }
+
+    #[Computed]
+    public function wons(): Collection
+    {
+        return $this->opportunities->where('status', 'won');
+    }
+
+    #[Computed]
+    public function losts(): Collection
+    {
+        return $this->opportunities->where('status', 'lost');
+    }
+
     public function updateOpportunityOrder($data)
     {
-
         $order = collect();
 
-        foreach ($data as $group) {
-            $order->push(
-                collect($group['items'])
-                    ->map(fn ($item) => $item['value'])
-                    ->join(',')
-            );
-        }
+        collect($data)->each(function ($group) use ($order) {
+            $values = collect($group['items'])->map(fn ($item) => $item['value'])->values();
+            $order->push((object) [
+                'group' => $group['value'],
+                'ids'   => $values,
+            ]);
+        });
 
-        $open = $order[0];
-        $won  = $order[1];
-        $lost = $order[2];
+        $open = $order->firstWhere('group', 'open');
+        $won  = $order->firstWhere('group', 'won');
+        $lost = $order->firstWhere('group', 'lost');
 
-        $ids = $order->join(',');
+        $cases = count($open->ids) > 0 ? "WHEN id IN ({$open->ids->join(',')}) THEN 'open' " : '';
+        $cases .= count($won->ids) > 0 ? "WHEN id IN ({$won->ids->join(',')}) THEN 'won' " : '';
+        $cases .= count($lost->ids) > 0 ? "WHEN id IN ({$lost->ids->join(',')}) THEN 'lost' " : '';
+
+        $ids = $order->pluck('ids')->flatten()->join(',');
 
         DB::table('opportunities')
             ->whereRaw("id IN ($ids)")
             ->update([
-                'status' => DB::raw('
-            CASE
-                WHEN id IN (' . $open . ") THEN 'open'
-                WHEN id IN (" . $won . ") THEN 'won'
-                WHEN id IN (" . $lost . ") THEN 'lost'
-            END"),
+                'status' => DB::raw("CASE $cases END"),
             ]);
 
         DB::table('opportunities')->update(['sort_order' => DB::raw("field(id, $ids)")]);

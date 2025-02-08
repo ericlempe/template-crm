@@ -76,10 +76,9 @@ class Board extends Component
         $order = collect();
 
         collect($data)->each(function ($group) use ($order) {
-            $values = collect($group['items'])->map(fn ($item) => $item['value'])->values();
             $order->push((object)[
                 'group' => $group['value'],
-                'ids'   => $values,
+                'ids'   => collect($group['items'])->map(fn ($item) => $item['value'])->values(),
             ]);
         });
 

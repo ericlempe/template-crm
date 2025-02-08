@@ -50,7 +50,7 @@ class Board extends Component
         return $this->opportunities->where('status', 'lost');
     }
 
-    public function handleStatusOrder(array $data)
+    public function handleStatusOrder(array $data): void
     {
         $order = $this->getItemsInOrder($data);
         $cases = $this->getSqlGroupCases($order);

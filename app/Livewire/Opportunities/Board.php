@@ -4,6 +4,7 @@ namespace App\Livewire\Opportunities;
 
 use App\Models\Opportunity;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Support\Collection as SupportCollection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 use Livewire\Attributes\Computed;
@@ -49,34 +50,55 @@ class Board extends Component
         return $this->opportunities->where('status', 'lost');
     }
 
-    public function updateOpportunityOrder($data)
+    public function handleStatusOrder(array $data)
+    {
+        $order = $this->getItemsInOrder($data);
+        $cases = $this->getSqlGroupCases($order);
+        $this->updateOpportunityOrder($cases, $order);
+    }
+
+    private function updateOpportunityOrder(string $cases, SupportCollection $collection): void
+    {
+        $ids = $collection->pluck('ids')->flatten()->join(',');
+        DB::transaction(function () use ($cases, $ids) {
+            DB::table('opportunities')
+                ->whereRaw("id IN ($ids)")
+                ->update([
+                    'status' => DB::raw("CASE $cases END"),
+                ]);
+
+            DB::table('opportunities')->update(['sort_order' => DB::raw("field(id, $ids)")]);
+        });
+    }
+
+    private function getItemsInOrder(array $data): SupportCollection
     {
         $order = collect();
 
         collect($data)->each(function ($group) use ($order) {
             $values = collect($group['items'])->map(fn ($item) => $item['value'])->values();
-            $order->push((object) [
+            $order->push((object)[
                 'group' => $group['value'],
                 'ids'   => $values,
             ]);
         });
 
-        $open = $order->firstWhere('group', 'open');
-        $won  = $order->firstWhere('group', 'won');
-        $lost = $order->firstWhere('group', 'lost');
-
-        $cases = count($open->ids) > 0 ? "WHEN id IN ({$open->ids->join(',')}) THEN 'open' " : '';
-        $cases .= count($won->ids) > 0 ? "WHEN id IN ({$won->ids->join(',')}) THEN 'won' " : '';
-        $cases .= count($lost->ids) > 0 ? "WHEN id IN ({$lost->ids->join(',')}) THEN 'lost' " : '';
-
-        $ids = $order->pluck('ids')->flatten()->join(',');
-
-        DB::table('opportunities')
-            ->whereRaw("id IN ($ids)")
-            ->update([
-                'status' => DB::raw("CASE $cases END"),
-            ]);
-
-        DB::table('opportunities')->update(['sort_order' => DB::raw("field(id, $ids)")]);
+        return $order;
     }
+
+    public function getSqlGroupCases(SupportCollection $collection): string
+    {
+        $cases = '';
+
+        foreach (['open', 'won', 'lost'] as $group) {
+            $groupData = $collection->firstWhere('group', $group);
+
+            if (count($groupData->ids) > 0) {
+                $cases .= "WHEN id IN ({$groupData->ids->join(',')}) THEN '{$group}' ";
+            }
+        }
+
+        return $cases;
+    }
+
 }

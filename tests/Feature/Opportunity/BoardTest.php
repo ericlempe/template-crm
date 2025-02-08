@@ -100,7 +100,7 @@ it('should be able to update status and order of each opportunity', function () 
     ];
 
     Livewire::test(Board::class)
-        ->call('updateOpportunityOrder', $data)
+        ->call('handleStatusOrder', $data)
         ->assertOk();
 
     $opp1->refresh();
@@ -146,7 +146,7 @@ it('should be able to update the board even if one of the statuses in empty', fu
     $data[$groupId]['items'] = [['order' => 1, 'value' => (string)$opportunity->id]];
 
     Livewire::test(Board::class)
-        ->call('updateOpportunityOrder', $data)
+        ->call('handleStatusOrder', $data)
         ->assertOk();
 })->with([
     'status: open' => ['open'],

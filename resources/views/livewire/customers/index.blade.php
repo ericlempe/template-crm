@@ -57,6 +57,15 @@
 
         <div class="flex space-x-1">
             <x-button
+                id="btn-show-customer-{{ $customer->id }}"
+                wire:key="btn-show-customer-{{ $customer->id }}"
+                icon="o-eye"
+                :link="route('customers.show', $customer)"
+                class="btn-sm btn-ghost"
+                tooltip="{{ __('Show Customer') }}"
+                spinner
+            />
+            <x-button
                 id="btn-update-customer-{{ $customer->id }}"
                 wire:key="btn-update-customer-{{ $customer->id }}"
                 icon="o-pencil"

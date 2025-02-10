@@ -23,6 +23,7 @@ Route::middleware(['auth', ShouldBeVerified::class])->group(function () {
 
     // region Customers
     Route::get('/customers', Customers\Index::class)->name('customers');
+    Route::get('/customers/{customer}/{tab?}', Customers\Show::class)->name('customers.show');
     // endregion
 
     // region Opportunities

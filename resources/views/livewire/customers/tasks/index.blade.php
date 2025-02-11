@@ -1,4 +1,5 @@
 <div class="p-4">
+    <livewire:customers.tasks.create :$customer/>
     <div class="uppercase font-bold text-slate-600 text-xs mb-2">
         Pending
         [{{ $this->notDoneTasks->count() }}]

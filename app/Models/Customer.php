@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Traits\Models\HasSearch;
 use Database\Factories\CustomerFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\{Model, SoftDeletes};
+use Illuminate\Database\Eloquent\{Model, Relations\HasMany, SoftDeletes};
 
 class Customer extends Model
 {
@@ -20,4 +20,9 @@ class Customer extends Model
         'email',
         'phone',
     ];
+
+    public function tasks(): HasMany
+    {
+        return $this->hasMany(Task::class);
+    }
 }

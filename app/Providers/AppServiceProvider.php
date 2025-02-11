@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use App\Enums\Can;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Gate;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,5 +29,7 @@ class AppServiceProvider extends ServiceProvider
                 fn (User $user) => $user->hasPermissionTo($can)
             );
         }
+
+        Model::preventLazyLoading(!app()->isProduction());
     }
 }

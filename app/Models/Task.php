@@ -12,7 +12,7 @@ class Task extends Model
     /** @use HasFactory<TaskFactory> */
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'title', 'assigned_to', 'done_at'];
+    protected $fillable = ['customer_id', 'title', 'assigned_to', 'done_at', 'sort_order'];
 
     protected $with = ['assignedTo'];
 

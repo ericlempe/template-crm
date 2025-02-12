@@ -17,6 +17,7 @@ return new class () extends Migration {
             $table->foreignIdFor(User::class, 'assigned_to')->nullable()->constrained();
             $table->string('title');
             $table->dateTime('done_at')->nullable();
+            $table->unsignedSmallInteger('sort_order')->default(0);
             $table->timestamps();
         });
     }

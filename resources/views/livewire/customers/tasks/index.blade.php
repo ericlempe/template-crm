@@ -6,14 +6,34 @@
     </div>
     <ul class="flex flex-col gap-1 mb-6" wire:sortable="updateTaskOrder">
         @foreach($this->notDoneTasks as $task)
-            <li wire:sortable.item="{{ $task->id }}" wire:key="task-not-done{{ $task->id }}">
-                <input type="checkbox" wire:click="toggleCheck({{ $task->id  }}, 'done')"
-                       id="task-not-done-{{ $task->id }}" value="1" @checked($task->done_at) />
-                <label class="cursor-grab" for="task-not-done-{{ $task->id }}"
-                       wire:sortable.handle>{{ $task->title }}</label>
-                <select>
-                    <option>Assigned to: {{ $task->assignedTo?->name }}</option>
-                </select>
+
+            <li class="flex justify-between items-center" wire:sortable.item="{{ $task->id }}"
+                wire:key="task-not-done{{ $task->id }}">
+
+                <div class="flex items-center gap-2">
+                    <x-checkbox
+                        id="task-done-{{ $task->id }}"
+                        wire:click="toggleCheck({{ $task->id  }}, 'done')"
+                        class="checkbox-sm"
+                        value="1"
+                    >
+                        <x-slot:label class="cursor-grab" for="task-done-{{ $task->id }}" wire:sortable.handle>
+                            {{ $task->title }}
+                        </x-slot:label>
+                    </x-checkbox>
+
+                    <select>
+                        <option>Assigned to: {{ $task->assignedTo?->name }}</option>
+                    </select>
+                </div>
+                <x-button
+                    wire:click="deleteTask({{ $task->id }})"
+                    class="btn-sm btn-ghost"
+                    tooltip="{{ __('Task Delete') }}"
+                    spinner
+                >
+                    <x-icon name="o-trash" class="hover:text-red-500"/>
+                </x-button>
             </li>
         @endforeach
     </ul>
@@ -26,15 +46,34 @@
     </div>
     <ul class="flex flex-col gap-1" wire:sortable="updateTaskOrder">
         @foreach($this->doneTasks as $task)
-            <li wire:sortable.item="{{ $task->id }}" wire:key="task-done{{ $task->id }}">
-                <input type="checkbox" wire:click="toggleCheck({{ $task->id  }}, 'pending')"
-                       id="task-done-{{ $task->id }}"
-                       value="1" @checked($task->done_at) />
-                <label class="cursor-grab" for="task-done-{{ $task->id }}"
-                       wire:sortable.handle>{{ $task->title }}</label>
-                <select>
-                    <option>Assigned to: {{ $task->assignedTo?->name }}</option>
-                </select>
+            <li class="flex justify-between items-center" wire:sortable.item="{{ $task->id }}"
+                wire:key="task-done{{ $task->id }}">
+
+                <div class="flex items-center gap-2">
+                    <x-checkbox
+                        id="task-done-{{ $task->id }}"
+                        wire:click="toggleCheck({{ $task->id  }}, 'pending')"
+                        class="checkbox-sm"
+                        value="1"
+                        checked
+                    >
+                        <x-slot:label class="cursor-grab" for="task-done-{{ $task->id }}" wire:sortable.handle>
+                            {{ $task->title }}
+                        </x-slot:label>
+                    </x-checkbox>
+
+                    <select>
+                        <option>Assigned to: {{ $task->assignedTo?->name }}</option>
+                    </select>
+                </div>
+                <x-button
+                    wire:click="deleteTask({{ $task->id }})"
+                    class="btn-sm btn-ghost"
+                    tooltip="{{ __('Task Delete') }}"
+                    spinner
+                >
+                    <x-icon name="o-trash" class="hover:text-red-500"/>
+                </x-button>
             </li>
         @endforeach
     </ul>

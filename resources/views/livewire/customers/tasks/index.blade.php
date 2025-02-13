@@ -11,16 +11,20 @@
                 wire:key="task-not-done{{ $task->id }}">
 
                 <div class="flex items-center gap-2">
+                    <x-button
+                        class="btn-square btn-ghost btn-sm cursor-grab"
+                        tooltip="{{ __('Drag to reorder') }}"
+                        icon="o-chevron-up-down"
+                        wire:sortable.handle
+                    />
+
                     <x-checkbox
+                        :label="$task->title"
                         id="task-done-{{ $task->id }}"
                         wire:click="toggleCheck({{ $task->id  }}, 'done')"
                         class="checkbox-sm"
                         value="1"
-                    >
-                        <x-slot:label class="cursor-grab" for="task-done-{{ $task->id }}" wire:sortable.handle>
-                            {{ $task->title }}
-                        </x-slot:label>
-                    </x-checkbox>
+                    />
 
                     <select>
                         <option>Assigned to: {{ $task->assignedTo?->name }}</option>
@@ -28,7 +32,7 @@
                 </div>
                 <x-button
                     wire:click="deleteTask({{ $task->id }})"
-                    class="btn-sm btn-ghost"
+                    class="btn-square btn-sm btn-ghost"
                     tooltip="{{ __('Task Delete') }}"
                     spinner
                 >
@@ -50,17 +54,20 @@
                 wire:key="task-done{{ $task->id }}">
 
                 <div class="flex items-center gap-2">
+                    <x-button
+                        class="btn-square btn-ghost btn-sm cursor-grab"
+                        tooltip="{{ __('Drag to reorder') }}"
+                        icon="o-chevron-up-down"
+                        wire:sortable.handle
+                    />
                     <x-checkbox
+                        :label="$task->title"
                         id="task-done-{{ $task->id }}"
                         wire:click="toggleCheck({{ $task->id  }}, 'pending')"
                         class="checkbox-sm"
                         value="1"
                         checked
-                    >
-                        <x-slot:label class="cursor-grab" for="task-done-{{ $task->id }}" wire:sortable.handle>
-                            {{ $task->title }}
-                        </x-slot:label>
-                    </x-checkbox>
+                    />
 
                     <select>
                         <option>Assigned to: {{ $task->assignedTo?->name }}</option>
@@ -68,7 +75,7 @@
                 </div>
                 <x-button
                     wire:click="deleteTask({{ $task->id }})"
-                    class="btn-sm btn-ghost"
+                    class="btn-square btn-sm btn-ghost"
                     tooltip="{{ __('Task Delete') }}"
                     spinner
                 >

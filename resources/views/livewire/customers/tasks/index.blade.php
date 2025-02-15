@@ -1,10 +1,23 @@
-<div class="p-4">
+<div class="p-4" x-data="{ showDoneList: true, showNotDoneList: true }">
     <livewire:customers.tasks.create :$customer/>
     <div class="uppercase font-bold text-slate-600 text-xs mb-2">
         Pending
         [{{ $this->notDoneTasks->count() }}]
+        <button type="button" title="{{ __('Hide/Show list') }}" class="cursor-pointer"
+                @click="showNotDoneList = !showNotDoneList">
+            <x-icon
+                x-show="showNotDoneList"
+                name="o-chevron-down"
+                class="w-4 h-4 -mt-px opacity-50 hover:opacity-100 hover:text-error"
+            />
+            <x-icon
+                x-show="!showNotDoneList"
+                name="o-chevron-up"
+                class="w-4 h-4 -mt-px opacity-50 hover:opacity-100 hover:text-error"
+            />
+        </button>
     </div>
-    <ul class="flex flex-col gap-1 mb-6" wire:sortable="updateTaskOrder">
+    <ul class="flex flex-col gap-1 mb-6" wire:sortable="updateTaskOrder" x-show="showNotDoneList">
         @foreach($this->notDoneTasks as $task)
 
             <li class="flex justify-between items-center" wire:sortable.item="{{ $task->id }}"
@@ -47,8 +60,21 @@
     <div class="uppercase font-bold text-slate-600 text-xs mb-2">
         Done
         [{{ $this->doneTasks->count() }}]
+        <button type="button" title="{{ __('Hide/Show list') }}" class="cursor-pointer"
+                @click="showDoneList = !showDoneList">
+            <x-icon
+                x-show="showDoneList"
+                name="o-chevron-down"
+                class="w-4 h-4 -mt-px opacity-50 hover:opacity-100 hover:text-error"
+            />
+            <x-icon
+                x-show="!showDoneList"
+                name="o-chevron-up"
+                class="w-4 h-4 -mt-px opacity-50 hover:opacity-100 hover:text-error"
+            />
+        </button>
     </div>
-    <ul class="flex flex-col gap-1" wire:sortable="updateTaskOrder">
+    <ul class="flex flex-col gap-1" wire:sortable="updateTaskOrder" x-show="showDoneList">
         @foreach($this->doneTasks as $task)
             <li class="flex justify-between items-center" wire:sortable.item="{{ $task->id }}"
                 wire:key="task-done{{ $task->id }}">

@@ -17,7 +17,8 @@
             />
         </button>
     </div>
-    <ul class="flex flex-col gap-1 mb-6" wire:sortable="updateTaskOrder" x-show="showNotDoneList">
+    <ul class="flex flex-col gap-1 mb-6" wire:sortable="updateTaskOrder" x-show="showNotDoneList"
+        x-transition.opacity.duration.400ms>
         @foreach($this->notDoneTasks as $task)
 
             <li class="flex justify-between items-center" wire:sortable.item="{{ $task->id }}"
@@ -74,7 +75,8 @@
             />
         </button>
     </div>
-    <ul class="flex flex-col gap-1" wire:sortable="updateTaskOrder" x-show="showDoneList">
+    <ul class="flex flex-col gap-1" wire:sortable="updateTaskOrder" x-show="showDoneList"
+        x-transition.opacity.duration.400ms>
         @foreach($this->doneTasks as $task)
             <li class="flex justify-between items-center" wire:sortable.item="{{ $task->id }}"
                 wire:key="task-done{{ $task->id }}">
